@@ -2887,11 +2887,28 @@ Requires owner privileges."
          :chat_id (plist-get chat :id)
          :forum_topic_id (telega-topic-id forum-topic))))
 
-(defun telega--createForumTopic (chat name &optional icon)
-  )
+(cl-defun telega--createForumTopic (chat name &key icon is-name-implicit callback)
+  "Create a forum topic in CHAT named NAME."
+  (declare (indent 1))
+  (telega-server--call
+   (list :@type "createForumTopic"
+         :chat_id (plist-get chat :id)
+         :name name
+         :icon_custom_emoji_id (or icon "0")
+         :is_name_implicit (if is-name-implicit t :false))
+   callback))
 
 (cl-defun telega--editForumTopic (chat forum-topic &key name icon)
-  )
+  "Edit FORUM-TOPIC in CHAT."
+  (telega-server--send
+   (nconc
+    (list :@type "editForumTopic"
+          :chat_id (plist-get chat :id)
+          :forum_topic_id (telega-topic-id forum-topic))
+    (when name
+      (list :name name))
+    (when icon
+      (list :icon_custom_emoji_id icon)))))
 
 (defun telega--toggleForumTopicIsClosed (chat forum-topic closed-p)
   (telega-server--send

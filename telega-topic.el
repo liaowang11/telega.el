@@ -30,8 +30,14 @@
 (require 'telega-core)
 
 (declare-function telega-chat--mark-dirty "telega-tdlib-events" (chat &optional event))
+(declare-function telega-chat-for-interactive "telega-core" ())
 (declare-function telega-chat-get "telega-chat" (chat-id &optional offline-p))
+(declare-function telega-completing-read-topic "telega-util" (chat &optional prompt))
+(declare-function telega-read-im-sure-p "telega-util" (prompt))
+(declare-function telega--createForumTopic "telega-tdlib" (chat name &key icon is-name-implicit callback))
+(declare-function telega--deleteForumTopic "telega-tdlib" (chat forum-topic))
 (declare-function telega--getForumTopic "telega-tdlib" (chat forum-topic-id &optional callback))
+(declare-function telega--toggleForumTopicIsClosed "telega-tdlib" (chat forum-topic closed-p))
 (declare-function telega-topic-button-action "telega-root" (topic))
 
 (defvar telega-topic--default-icons nil
@@ -252,6 +258,57 @@
     (when (and button (eq (button-type button) 'telega-topic))
       (button-get button :value))))
 
+(defun telega-topic-for-interactive ()
+  "Return topic at point or in current chat buffer.
+For use by interactive commands."
+  (or (telega-topic-at (point))
+      telega-chatbuf--topic
+      (when-let ((chat (telega-chat-for-interactive)))
+        (when (telega-chat-match-p chat 'is-forum)
+          (telega-completing-read-topic chat)))
+      (user-error "No topic at point")))
+
+(defun telega-topic-create (chat)
+  "Create a topic in CHAT and open it."
+  (interactive
+   (let ((chat (telega-chat-for-interactive)))
+     (unless (and chat (telega-chat-match-p chat 'is-forum))
+       (user-error "Can't create topic for non-forum chat"))
+     (list chat)))
+  (let* ((name (read-string "Topic Title: "))
+         (topic-info (telega--createForumTopic chat name))
+         (forum-topic-id (plist-get topic-info :forum_topic_id))
+         (topic (telega--getForumTopic chat forum-topic-id)))
+    (setq topic (telega-topic--ensure topic chat))
+    (telega-chat--mark-dirty chat 'topics)
+    (telega-topic-goto topic)))
+
+(defun telega-topic-toggle-close (topic)
+  "Close or reopen TOPIC."
+  (interactive (list (telega-topic-for-interactive)))
+  (let ((chat (telega-topic-chat topic))
+        (closed-p (telega-topic-match-p topic 'is-closed)))
+    (unless (plist-get (telega-chat--info chat 'locally) :is_forum)
+      (user-error "Closing topics is supported only for forum supergroups"))
+    (telega--toggleForumTopicIsClosed chat topic (not closed-p))
+    (plist-put (plist-get topic :info) :is_closed (not closed-p))
+    (telega-chat--mark-dirty chat 'topics)))
+
+(defun telega-topic-delete (topic)
+  "Delete TOPIC after confirmation."
+  (interactive (list (telega-topic-for-interactive)))
+  (let* ((chat (telega-topic-chat topic))
+         (title (telega-tl-str (plist-get topic :info) :name)))
+    (when (telega-read-im-sure-p
+           (format "Delete topic \"%s\"" title))
+      (let ((ret (telega--deleteForumTopic chat topic)))
+        (puthash (plist-get chat :id)
+                 (assq-delete-all (telega-topic-id topic)
+                                  (telega-chat-topics-alist chat))
+                 telega--chat-topics)
+        (telega-chat--mark-dirty chat 'topics)
+        ret))))
+
 (defun telega-topic-goto (topic &optional start-msg-id)
   "Open TOPIC in a chatbuf.
 If START-MSG-ID is specified, jump to the this message in the topic."
@@ -325,6 +382,8 @@ If START-MSG-ID is specified, jump to the this message in the topic."
 (defvar telega-topic-button-map
   (let ((map (make-sparse-keymap)))
     (set-keymap-parent map button-map)
+    (define-key map (kbd "c") 'telega-topic-toggle-close)
+    (define-key map (kbd "d") 'telega-topic-delete)
     (define-key map (kbd "i") 'telega-describe-topic)
     (define-key map (kbd "h") 'telega-describe-topic)
     map)

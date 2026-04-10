@@ -33,6 +33,7 @@
 
 (declare-function telega-msg-forward-dwim "telega-chat" (messages &optional remove-sender-p remove-caption-p chat))
 (declare-function telega-msg-forward-dwim-to-many "telega-chat" (messages chats &optional remove-sender-p remove-caption-p))
+(declare-function telega-topic-create "telega-topic" (chat))
 
 ;; Compatibility with older transient
 (unless (fboundp 'transient-prefix-object)
@@ -761,6 +762,10 @@ If DEFAULT-VALUE is not specified, then nil is used."
                     (telega-i18n "lng_info_about_label")))
     ("a" telega-chat-add-member
      :description (lambda () (telega-i18n "lng_profile_add_participant")))
+    ("t" telega-topic-create
+     :if (lambda ()
+           (telega-chat-match-p (telega-transient-scope) 'is-forum))
+     :description (lambda () (telega-i18n "lng_forum_create_topic")))
     ("r" telega-chat-toggle-read
      :description (lambda ()
                     (if (telega-chat-match-p (telega-transient-scope) 'unread)
