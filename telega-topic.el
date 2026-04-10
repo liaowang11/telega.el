@@ -30,6 +30,8 @@
 (require 'telega-core)
 
 (declare-function telega-chat--mark-dirty "telega-tdlib-events" (chat &optional event))
+(declare-function telega-chat-get "telega-chat" (chat-id &optional offline-p))
+(declare-function telega--getForumTopic "telega-tdlib" (chat forum-topic-id &optional callback))
 (declare-function telega-topic-button-action "telega-root" (topic))
 
 (defvar telega-topic--default-icons nil
@@ -234,6 +236,16 @@
     (telega-topic-get (telega-msg-chat msg)
                       (telega--MessageTopic-id msg-topic))))
 
+(defun telega-msg-topic-ensure (msg)
+  "Return topic for the message MSG, fetching it if needed."
+  (or (telega-msg-topic msg)
+      (when-let* ((msg-topic (plist-get msg :topic_id))
+                  ((eq (telega--tl-type msg-topic) 'messageTopicForum))
+                  (chat (telega-chat-get (plist-get msg :chat_id) 'offline))
+                  (topic (telega--getForumTopic
+                          chat (plist-get msg-topic :forum_topic_id))))
+        (telega-topic--ensure topic chat))))
+
 (defun telega-topic-at (&optional pos)
   "Return topic at point POS."
   (let ((button (button-at (or pos (point)))))
@@ -304,7 +316,9 @@ If START-MSG-ID is specified, jump to the this message in the topic."
 (defun telega-msg-show-topic-info (msg)
   "Show MSG's topic info."
   (interactive (list (telega-msg-for-interactive)))
-  (telega-describe-topic (telega-msg-topic msg)))
+  (if-let ((topic (telega-msg-topic-ensure msg)))
+      (telega-describe-topic topic)
+    (user-error "telega: Can't resolve topic")))
 
 
 ;;; Topic button
