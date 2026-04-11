@@ -353,6 +353,38 @@ Have Stoploss 690 Satoshi." :entities []))))
       (remhash bot-id users-ht)
       (remhash chat-id telega--chats))))
 
+
+(ert-deftest telega-msg-open-thread-or-topic-handles-forum-topic-errors ()
+  "Forum topic lookup errors should not trigger internal type errors."
+  (let* ((bot-id 90921)
+         (chat-id 90922)
+         (topic-id 90923)
+         (users-ht (cdr (assq 'user telega--info)))
+         (bot-user `(:@type "user" :id ,bot-id
+                             :first_name "Topic"
+                             :last_name "Bot"
+                             :type (:@type "userTypeBot" :has_topics t)))
+         (bot-chat `(:@type "chat" :id ,chat-id
+                             :type (:@type "chatTypePrivate" :user_id ,bot-id)
+                             :title "Topic Bot"))
+         (msg `(:@type "message" :id 90924 :chat_id ,chat-id
+                         :topic_id (:@type "messageTopicForum"
+                                           :forum_topic_id ,topic-id))))
+    (unwind-protect
+        (progn
+          (puthash bot-id bot-user users-ht)
+          (puthash chat-id bot-chat telega--chats)
+          (cl-letf (((symbol-function 'telega--getForumTopic)
+                     (lambda (_chat _forum-topic-id &optional _callback)
+                       '(:@type "error" :code 404 :message "Not Found"))))
+            (should-not (telega-msg-topic msg 'sync))
+            (should-error (telega-msg-open-thread-or-topic msg)
+                          :type 'user-error)
+            (should-error (telega-msg-show-topic-info msg)
+                          :type 'user-error)))
+      (remhash chat-id telega--chat-topics)
+      (remhash bot-id users-ht)
+      (remhash chat-id telega--chats))))
 ;; Local Variables:
 ;; no-byte-compile: t
 ;; End:
