@@ -236,21 +236,17 @@
          (telega-chat--forum-topics-fetch chat callback)
          )))
 
-(defun telega-msg-topic (msg)
-  "Return topic for the message MSG."
-  (when-let ((msg-topic (plist-get msg :topic_id)))
-    (telega-topic-get (telega-msg-chat msg)
-                      (telega--MessageTopic-id msg-topic))))
-
-(defun telega-msg-topic-ensure (msg)
-  "Return topic for the message MSG, fetching it if needed."
-  (or (telega-msg-topic msg)
-      (when-let* ((msg-topic (plist-get msg :topic_id))
-                  ((eq (telega--tl-type msg-topic) 'messageTopicForum))
-                  (chat (telega-chat-get (plist-get msg :chat_id) 'offline))
-                  (topic (telega--getForumTopic
-                          chat (plist-get msg-topic :forum_topic_id))))
-        (telega-topic--ensure topic chat))))
+(defun telega-msg-topic (msg &optional sync-p)
+  "Return topic for the message MSG.
+If SYNC-P is non-nil, fetch missing forum topic info before returning it."
+  (when-let* ((msg-topic (plist-get msg :topic_id))
+              (chat (telega-msg-chat msg 'offline)))
+    (or (telega-topic-get chat (telega--MessageTopic-id msg-topic))
+        (when-let* (sync-p
+                    (forum-topic-msg (telega-msg-match-p msg 'is-forum-topic))
+                    (topic (telega--getForumTopic
+                            chat (plist-get forum-topic-msg :forum_topic_id))))
+          (telega-topic--ensure topic chat)))))
 
 (defun telega-topic-at (&optional pos)
   "Return topic at point POS."
@@ -373,7 +369,7 @@ If START-MSG-ID is specified, jump to the this message in the topic."
 (defun telega-msg-show-topic-info (msg)
   "Show MSG's topic info."
   (interactive (list (telega-msg-for-interactive)))
-  (if-let ((topic (telega-msg-topic-ensure msg)))
+  (if-let ((topic (telega-msg-topic msg 'sync)))
       (telega-describe-topic topic)
     (user-error "telega: Can't resolve topic")))
 
