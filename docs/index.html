@@ -3,10 +3,10 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="telega" xml:lang="telega">
 <head>
-<!-- 2026-04-08 Ср 22:50 -->
+<!-- 2026-04-24 Пт 11:49 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Telega Manual (v0.8.630)</title>
+<title>Telega Manual (v0.8.632)</title>
 <meta name="author" content="Zajcev Evgeny" />
 <meta name="generator" content="Org Mode" />
 <link rel="stylesheet" type="text/css" href="https://zevlg.github.io/org-html-themes/src/readtheorg_theme/css/htmlize.css"/>
@@ -68,7 +68,7 @@
 <body>
 <div id="content" class="content">
 <div id="table-of-contents" role="doc-toc">
-<h2><img id="toc-logo" src="https://raw.githubusercontent.com/zevlg/telega.el/master/etc/telega-logo.svg"/>&nbsp;Telega Manual (v0.8.630)</h2>
+<h2><img id="toc-logo" src="https://raw.githubusercontent.com/zevlg/telega.el/master/etc/telega-logo.svg"/>&nbsp;Telega Manual (v0.8.632)</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
 <li><a href="#introduction">Introduction</a></li>
@@ -131,11 +131,7 @@
 <li><a href="#deleting-messages">Deleting messages</a></li>
 <li><a href="#scheduling-messages-and-reminders">Scheduling messages and reminders</a></li>
 <li><a href="#navigating-previous-input">Navigating previous input</a></li>
-<li><a href="#completing-input-in-chatbuf">Completing input in chatbuf</a>
-<ul>
-<li><a href="#using-capf-for-input-completions">Using capf for input completions</a></li>
-</ul>
-</li>
+<li><a href="#completing-input-in-a-chatbuf">Completing input in a chatbuf</a></li>
 <li><a href="#sending-messages-via-bots">Sending messages via bots</a></li>
 <li><a href="#filtering-chat-messages-aka-shared-media">Filtering chat messages a.k.a. Shared Media</a></li>
 <li><a href="#inplace-searching-in-text-messages-or-media-captions">Inplace searching in text messages or media captions</a></li>
@@ -371,7 +367,7 @@ Thanks to <a href="https://t.me/ritsch_master"><code>@ritsch_master</code></a>
 <p>
 <a href="https://core.telegram.org/tdlib">TDLib</a> is the library for building Telegram clients. It requires a
 large amount of memory to be built.  Make sure you are using TDLib
-version equal to v1.8.63-1677a0c77.
+version equal to v1.8.63-8921c22f0.
 </p>
 
 <p>
@@ -384,7 +380,7 @@ from <a href="https://brew.sh">brew.sh</a>.  Just run:
 </div>
 
 <p>
-On Linux, you will need to build <code>TDLib</code> from source.  Use 
+On Linux, you will need to build <code>TDLib</code> from source.  Use
 <a href="https://tdlib.github.io/td/build.html">TDLib build instructions generator</a> for comprehensive build
 instructions.
 </p>
@@ -662,7 +658,7 @@ Some options affecting <code>TDLib</code> runtime:
 </p>
 <ul class="org-ul">
 <li><p>
-User Option: <code>telega-directory</code> 
+User Option: <code>telega-directory</code>
 </p>
 
 <p>
@@ -679,17 +675,17 @@ Default value: "~/.telega"
 
 <ul class="org-ul">
 <li><p>
-User Option: <code>telega-options-plist</code> 
+User Option: <code>telega-options-plist</code>
 </p>
 
 <p>
 Plist of options to set.
 Only writable options can be set.
-See <a href="https://core.telegram.org/tdlib/options">https://core.telegram.org/tdlib/options</a> 
+See <a href="https://core.telegram.org/tdlib/options">https://core.telegram.org/tdlib/options</a>
 </p>
 
 <p>
-Default value: 
+Default value:
 </p>
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="font-weight: bold;">:online</span> t <span style="font-weight: bold;">:localization_target</span> <span style="font-style: italic;">"tdesktop"</span> <span style="font-weight: bold;">:language_pack_id</span> <span style="font-style: italic;">"en"</span>
@@ -698,7 +694,7 @@ Default value:
 </div></li>
 
 <li><p>
-User Option: <code>telega-my-location</code> 
+User Option: <code>telega-my-location</code>
 </p>
 
 <p>
@@ -706,7 +702,7 @@ Set to non-nil to use this as location of me.
 Plist in form (:latitude &lt;LAT&gt; :longitude &lt;LONG&gt;)
 To publically expose this location set <code>:is_location_visible</code> to
 non-nil in <code>telega-options-plist</code>.
-Used to calculate distances from other peers to me. 
+Used to calculate distances from other peers to me.
 </p>
 
 <p>
@@ -788,7 +784,7 @@ for that variables.  Most notable options are:
 </p>
 <ul class="org-ul">
 <li><p>
-User Option: <code>telega-use-images</code> 
+User Option: <code>telega-use-images</code>
 </p>
 
 <p>
@@ -803,7 +799,7 @@ Set to <code>imagemagick</code> to use ImageMagick to handle images (not recomme
 </p></li>
 
 <li><p>
-User Option: <code>telega-emoji-font-family</code> 
+User Option: <code>telega-emoji-font-family</code>
 </p>
 
 <p>
@@ -811,7 +807,7 @@ Font to use for emoji image generation using <code>telega-emoji-create-svg</code
 </p></li>
 
 <li><p>
-User Option: <code>telega-emoji-use-images</code> 
+User Option: <code>telega-emoji-use-images</code>
 </p>
 
 <p>
@@ -819,7 +815,7 @@ Non-nil to use images for emojis.
 </p></li>
 
 <li><p>
-User Option: <code>telega-online-status-function</code> 
+User Option: <code>telega-online-status-function</code>
 </p>
 
 <p>
@@ -873,7 +869,7 @@ corresponding chatbuf.
 <p>
 rootbuf lists the chat buttons, such as:
 </p>
-<pre class="example" id="org87f56a4">
+<pre class="example" id="org547dd07">
 {🎗Saved Messages            }📌  📹 Video (10s)               Fri✓
 [Emacs | Emacs (english)     ]  @oldosfan: same                Fri
 ...
@@ -891,7 +887,7 @@ Named temex to filter chats in the rootbuf.
 Custom chat filters are displayed as buttons above the chat list in
 the rootbuf, such as:
 </p>
-<pre class="example" id="orgdd7aa5e">
+<pre class="example" id="org9284c27">
 [243:📑Main      4890]  [51:Groups       4677]  [27:Channels      210]
 [53:Contacts         ]  [0:Important         ]  [3:📑Archive      670]
 </pre>
@@ -909,7 +905,7 @@ with new one at button.
 
 <ul class="org-ul">
 <li><p>
-User Option: <code>telega-filter-button-width</code> 
+User Option: <code>telega-filter-button-width</code>
 </p>
 
 <p>
@@ -919,24 +915,24 @@ If float in range (0..1), then occupy this percents of
 <code>telega-root-fill-column</code> chars, but not less then 15 chars.
 If list, where first element is float, then use 1 and 2 list values as
 min and max values for a width calculation using
-<code>telega-canonicalize-number</code>. 
+<code>telega-canonicalize-number</code>.
 </p>
 
 <p>
 Default value: <code>(0.25 17 25)</code>
 </p></li>
 <li><p>
-User Option: <code>telega-filters-custom</code> 
+User Option: <code>telega-filters-custom</code>
 </p>
 
 <p>
 Alist of custom filters in form (NAME . TEMEX).
 NAME can be an i18n string, such as "lng<sub>filters</sub><sub>type</sub><sub>groups</sub>".
-This filters are displayed as filter buttons at the top of rootbuf. 
+This filters are displayed as filter buttons at the top of rootbuf.
 </p>
 
 <p>
-Default value: 
+Default value:
 </p>
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">((<span style="font-style: italic;">"Main"</span> . main) (<span style="font-style: italic;">"Important"</span> . important)
@@ -948,22 +944,22 @@ Default value:
 </div></li>
 
 <li><p>
-User Option: <code>telega-filter-custom-expand</code> 
+User Option: <code>telega-filter-custom-expand</code>
 </p>
 
 <p>
-Non-nil to expand custom filter when adding to active filters. 
+Non-nil to expand custom filter when adding to active filters.
 </p>
 
 <p>
 Default value: <code>t</code>
 </p></li>
 <li><p>
-User Option: <code>telega-filter-custom-show-folders</code> 
+User Option: <code>telega-filter-custom-show-folders</code>
 </p>
 
 <p>
-Non-nil to show telegram folders along the side with custom filters. 
+Non-nil to show telegram folders along the side with custom filters.
 </p>
 
 <p>
@@ -980,7 +976,7 @@ Only chats matching <b><b>all</b></b> temexes in the active chat filter
 are displayed in rootbuf.  Active chat filter is displayed above the
 chat list in rootbuf, such as:
 </p>
-<pre class="example" id="orgdd8cde4">
+<pre class="example" id="orgcd76fa8">
 -/------------------------------(main)--------------------------------
 </pre>
 
@@ -990,11 +986,11 @@ chat list in rootbuf, such as:
 
 <ul class="org-ul">
 <li><p>
-User Option: <code>telega-filter-default</code> 
+User Option: <code>telega-filter-default</code>
 </p>
 
 <p>
-Temex to filter chats by default. 
+Temex to filter chats by default.
 </p>
 
 <p>
@@ -1018,7 +1014,7 @@ By default, chats are sorted according to internal Telegram order
 In case active sorter is enabled, it is displayed above the chat
 list in rootbuf, such as:
 </p>
-<pre class="example" id="org5236eb7">
+<pre class="example" id="org2ad3e2d">
 -\---------------------(unread-count join-date)-----------------------
 </pre></dd>
 
@@ -1120,11 +1116,11 @@ Customizable options:
 </p>
 <ul class="org-ul">
 <li><p>
-User Option: <code>telega-unread-chat-temex</code> 
+User Option: <code>telega-unread-chat-temex</code>
 </p>
 
 <p>
-Chat Temex for <code>telega-switch-unread-chat</code> command. 
+Chat Temex for <code>telega-switch-unread-chat</code> command.
 </p>
 
 <p>
@@ -1165,11 +1161,11 @@ Important customizable options:
 </p>
 <ul class="org-ul">
 <li><p>
-User Option: <code>telega-root-fill-column</code> 
+User Option: <code>telega-root-fill-column</code>
 </p>
 
 <p>
-Maximum width to use in root buffer to display active filters and chats. 
+Maximum width to use in root buffer to display active filters and chats.
 </p>
 
 <p>
@@ -1184,7 +1180,7 @@ rootbuf.
 </p></li>
 
 <li><p>
-User Option: <code>telega-root-keep-cursor</code> 
+User Option: <code>telega-root-keep-cursor</code>
 </p>
 
 <p>
@@ -1196,7 +1192,7 @@ for rootbuf and chatbuf.
 
 <p>
 Consider setting <code>switch-to-buffer-preserve-window-point</code> to nil,
-to make <code>telega-root-keep-cursor</code> always work as expected. 
+to make <code>telega-root-keep-cursor</code> always work as expected.
 </p>
 
 <p>
@@ -1263,35 +1259,35 @@ Customizable options:
 </p>
 <ul class="org-ul">
 <li><p>
-User Option: <code>telega-root-view-grouping-alist</code> 
+User Option: <code>telega-root-view-grouping-alist</code>
 </p>
 
 <p>
 Alist of chat temexes for "grouping" root view.
-Car is name of the chats group, cdr is a chat temex to match chats. 
+Car is name of the chats group, cdr is a chat temex to match chats.
 </p>
 
 <p>
 Default value: <code>(("Important" . important))</code>
 </p></li>
 <li><p>
-User Option: <code>telega-root-view-grouping-folders</code> 
+User Option: <code>telega-root-view-grouping-folders</code>
 </p>
 
 <p>
 Non-nil to add Chat Folders in the grouping root view.
-Could be one of <code>prepend</code>, <code>append</code> or nil. 
+Could be one of <code>prepend</code>, <code>append</code> or nil.
 </p>
 
 <p>
 Default value: <code>append</code>
 </p></li>
 <li><p>
-User Option: <code>telega-root-view-grouping-other-chats</code> 
+User Option: <code>telega-root-view-grouping-other-chats</code>
 </p>
 
 <p>
-Non-nil to show other chats in the "grouping" root view. 
+Non-nil to show other chats in the "grouping" root view.
 </p>
 
 <p>
@@ -1326,7 +1322,7 @@ Customizable options:
 </p>
 <ul class="org-ul">
 <li><p>
-User Option: <code>telega-root-view-files-exclude-subdirs</code> 
+User Option: <code>telega-root-view-files-exclude-subdirs</code>
 </p>
 
 <p>
@@ -1337,19 +1333,19 @@ the subdirectory in list, then file is ignored.
 Supported predicates: <code>telega-file--downloading-p</code>,
 <code>telega-file--uploading-p</code>, <code>telega-file--downloaded-p</code>,
 <code>telega-file--uploaded-p</code>, <code>telega-file--partially-downloaded-p</code>,
-<code>telega-file--partially-uploaded-p</code> 
+<code>telega-file--partially-uploaded-p</code>
 </p>
 
 <p>
 Default value: <code>((telega-file--downloaded-p "thumbnails" "profile_photos"))</code>
 </p></li>
 <li><p>
-User Option: <code>telega-chat-upload-attaches-ahead</code> 
+User Option: <code>telega-chat-upload-attaches-ahead</code>
 </p>
 
 <p>
 Non-nil to upload attachments ahead, before message actually sent.
-Having this non-nil "speedups" uploading, it is like files uploads instantly. 
+Having this non-nil "speedups" uploading, it is like files uploads instantly.
 </p>
 
 <p>
@@ -1366,15 +1362,15 @@ Customizable options:
 </p>
 <ul class="org-ul">
 <li><p>
-User Option: <code>telega-root-view-top-categories</code> 
+User Option: <code>telega-root-view-top-categories</code>
 </p>
 
 <p>
-List of top categories with limits. 
+List of top categories with limits.
 </p>
 
 <p>
-Default value: 
+Default value:
 </p>
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">((<span style="font-style: italic;">"Users"</span> . 10) (<span style="font-style: italic;">"Groups"</span> . 10) (<span style="font-style: italic;">"Channels"</span> . 10) (<span style="font-style: italic;">"Bots"</span> . 10)
@@ -1413,11 +1409,11 @@ Important customizable options:
 </p>
 <ul class="org-ul">
 <li><p>
-User Option: <code>telega-root-default-view-function</code> 
+User Option: <code>telega-root-default-view-function</code>
 </p>
 
 <p>
-Default view for the rootbuf. 
+Default view for the rootbuf.
 </p>
 
 <p>
@@ -1994,28 +1990,28 @@ Use <code>telega-story-match-p</code> to match a story.
 <div class="outline-text-3" id="text-some-customizable-options-making-use-of-telega-match-expressions">
 <ul class="org-ul">
 <li><p>
-User Option: <code>telega-filter-default</code> 
+User Option: <code>telega-filter-default</code>
 </p>
 
 <p>
-Temex to filter chats by default. 
+Temex to filter chats by default.
 </p>
 
 <p>
 Default value: <code>main</code>
 </p></li>
 <li><p>
-User Option: <code>telega-filters-custom</code> 
+User Option: <code>telega-filters-custom</code>
 </p>
 
 <p>
 Alist of custom filters in form (NAME . TEMEX).
 NAME can be an i18n string, such as "lng<sub>filters</sub><sub>type</sub><sub>groups</sub>".
-This filters are displayed as filter buttons at the top of rootbuf. 
+This filters are displayed as filter buttons at the top of rootbuf.
 </p>
 
 <p>
-Default value: 
+Default value:
 </p>
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">((<span style="font-style: italic;">"Main"</span> . main) (<span style="font-style: italic;">"Important"</span> . important)
@@ -2027,7 +2023,7 @@ Default value:
 </div></li>
 
 <li><p>
-User Option: <code>telega-use-tracking-for</code> 
+User Option: <code>telega-use-tracking-for</code>
 </p>
 
 <p>
@@ -2035,63 +2031,63 @@ Specifies Chat Temex for chats to be tracked with tracking.el.
 Make sure you have tracking.el loaded if this option is used.
 Only chats with corresponding opened chatbuf are tracked.
 Tracking notifications for telega buffers will use the
-`telega-tracking` face. 
+`telega-tracking` face.
 </p>
 
 <p>
 Default value: <code>nil</code>
 </p></li>
 <li><p>
-User Option: <code>telega-chat-group-messages-for</code> 
+User Option: <code>telega-chat-group-messages-for</code>
 </p>
 
 <p>
-Chat Temex for chats where to group messages by sender. 
+Chat Temex for chats where to group messages by sender.
 </p>
 
 <p>
 Default value: <code>(not (or saved-messages (type channel bot)))</code>
 </p></li>
 <li><p>
-User Option: <code>telega-chat-show-deleted-messages-for</code> 
+User Option: <code>telega-chat-show-deleted-messages-for</code>
 </p>
 
 <p>
-Chat Temex for chats where to show deleted messages in chatbuf. 
+Chat Temex for chats where to show deleted messages in chatbuf.
 </p>
 
 <p>
 Default value: <code>nil</code>
 </p></li>
 <li><p>
-User Option: <code>telega-root-view-grouping-alist</code> 
+User Option: <code>telega-root-view-grouping-alist</code>
 </p>
 
 <p>
 Alist of chat temexes for "grouping" root view.
-Car is name of the chats group, cdr is a chat temex to match chats. 
+Car is name of the chats group, cdr is a chat temex to match chats.
 </p>
 
 <p>
 Default value: <code>(("Important" . important))</code>
 </p></li>
 <li><p>
-User Option: <code>telega-chat-custom-order-for</code> 
+User Option: <code>telega-chat-custom-order-for</code>
 </p>
 
 <p>
-Chat temex returning custom order for the chat. 
+Chat temex returning custom order for the chat.
 </p>
 
 <p>
 Default value: <code>nil</code>
 </p></li>
 <li><p>
-User Option: <code>telega-avatar-workaround-gaps-for</code> 
+User Option: <code>telega-avatar-workaround-gaps-for</code>
 </p>
 
 <p>
-Chat temex for chats to enable workaround for gaps in the avatars. 
+Chat temex for chats to enable workaround for gaps in the avatars.
 </p>
 
 <p>
@@ -2139,12 +2135,12 @@ Customizable options for Chat Folders:
 </p>
 <ul class="org-ul">
 <li><p>
-User Option: <code>telega-root-view-grouping-folders</code> 
+User Option: <code>telega-root-view-grouping-folders</code>
 </p>
 
 <p>
 Non-nil to add Chat Folders in the grouping root view.
-Could be one of <code>prepend</code>, <code>append</code> or nil. 
+Could be one of <code>prepend</code>, <code>append</code> or nil.
 </p>
 
 <p>
@@ -2152,16 +2148,16 @@ Default value: <code>append</code>
 </p></li>
 
 <li><p>
-User Option: <code>telega-folder-icons-alist</code> 
+User Option: <code>telega-folder-icons-alist</code>
 </p>
 
 <p>
 Alist of symbols to be used as folder icons instead of <code>telega-symbol-folder</code>.
-See list of all available icon names in <code>telega-folder-icon-names</code>. 
+See list of all available icon names in <code>telega-folder-icon-names</code>.
 </p>
 
 <p>
-Default value: 
+Default value:
 </p>
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">((<span style="font-style: italic;">"All"</span> . <span style="font-style: italic;">"&#128172;"</span>) (<span style="font-style: italic;">"Unread"</span> . <span style="font-style: italic;">"&#9989;"</span>) (<span style="font-style: italic;">"Unmuted"</span> . <span style="font-style: italic;">"&#128276;"</span>) (<span style="font-style: italic;">"Bots"</span> . <span style="font-style: italic;">"&#129302;&#65039;"</span>)
@@ -2178,13 +2174,13 @@ Default value:
 
 <ul class="org-ul">
 <li><p>
-User Option: <code>telega-chat-folders-insexp</code> 
+User Option: <code>telega-chat-folders-insexp</code>
 </p>
 
 <p>
 Inserter sexp for chat folders prefixing chat's title.
 While using this insexp <code>telega-chat-folders</code> is bound to the list of
-folder names to be inserted. 
+folder names to be inserted.
 </p>
 
 <p>
@@ -2192,11 +2188,11 @@ Default value: <code>telega-folders-insert-default</code>
 </p></li>
 
 <li><p>
-User Option: <code>telega-chat-folders-exclude</code> 
+User Option: <code>telega-chat-folders-exclude</code>
 </p>
 
 <p>
-Exclude these folders from chat folders list to be displayed. 
+Exclude these folders from chat folders list to be displayed.
 </p>
 
 <p>
@@ -2204,11 +2200,11 @@ Default value: <code>("Unread" "Personal")</code>
 </p></li>
 
 <li><p>
-User Option: <code>telega-filter-custom-show-folders</code> 
+User Option: <code>telega-filter-custom-show-folders</code>
 </p>
 
 <p>
-Non-nil to show telegram folders along the side with custom filters. 
+Non-nil to show telegram folders along the side with custom filters.
 </p>
 
 <p>
@@ -2364,22 +2360,22 @@ For other chats date of the last message is taken.</dd>
 <div class="outline-text-3" id="text-customizable-options-making-use-of-sorting-criteria">
 <ul class="org-ul">
 <li><p>
-User Option: <code>telega-chat-completing-sort-criteria</code> 
+User Option: <code>telega-chat-completing-sort-criteria</code>
 </p>
 
 <p>
-Criteria to sort chats in <code>telega-completing-read-chat</code>. 
+Criteria to sort chats in <code>telega-completing-read-chat</code>.
 </p>
 
 <p>
 Default value: <code>(chatbuf-visibility chatbuf-recency order id)</code>
 </p></li>
 <li><p>
-User Option: <code>telega-chat-switch-buffer-sort-criteria</code> 
+User Option: <code>telega-chat-switch-buffer-sort-criteria</code>
 </p>
 
 <p>
-Criteria to sort open chats when switching with <code>telega-switch-buffer</code>. 
+Criteria to sort open chats when switching with <code>telega-switch-buffer</code>.
 </p>
 
 <p>
@@ -2428,18 +2424,18 @@ Important customizable options:
 </p>
 <ul class="org-ul">
 <li><p>
-User Option: <code>telega-chat-fill-column</code> 
+User Option: <code>telega-chat-fill-column</code>
 </p>
 
 <p>
-Column to fill chat messages to. 
+Column to fill chat messages to.
 </p>
 
 <p>
 Default value: <code>70</code>
 </p></li>
 <li><p>
-User Option: <code>telega-chat-use-date-breaks</code> 
+User Option: <code>telega-chat-use-date-breaks</code>
 </p>
 
 <p>
@@ -2447,7 +2443,7 @@ Non-nil to insert date break bar in chat buffers.
 Date break is a special mark separating two messages received on
 different days. Such as:
 </p>
-<pre class="example" id="org5a017c0">
+<pre class="example" id="orgce838d0">
 MSG1                              &lt;--- msg sent on 27dec
 -------(28 December 2020)------   &lt;--- date break
 MSG2                              &lt;--- msg sent on 28dec
@@ -2457,13 +2453,13 @@ MSG2                              &lt;--- msg sent on 28dec
 Default value: <code>t</code>
 </p></li>
 <li><p>
-User Option: <code>telega-msg-delimiter</code> 
+User Option: <code>telega-msg-delimiter</code>
 </p>
 
 <p>
 Delimiter for the messages in a chatbuf.
 Use ~(propertize "\n" \~line-spacing 0.25)' to add extra line space
-between messages. 
+between messages.
 </p>
 
 <p>
@@ -2534,7 +2530,7 @@ and value of the:
 </p>
 <ul class="org-ul">
 <li><p>
-User Option: <code>telega-chat-input-markups</code> 
+User Option: <code>telega-chat-input-markups</code>
 </p>
 
 <p>
@@ -2550,7 +2546,7 @@ used for ordinary <code>RET</code>, second is used for <code>C-u RET</code>, and
 "markdown1" syntax is not recommended, it always treats underscore
 as starting point of italic emphasize even inside URLs, thats why
 "markdown1" is not included into <code>telega-chat-input-markups</code> by
-default. 
+default.
 </p>
 
 <p>
@@ -2651,7 +2647,7 @@ Markup syntax table:
 There is also "markdown1" syntax to insert multiline code blocks of
 specified languge:
 </p>
-<pre class="example" id="org2cd7e60">
+<pre class="example" id="orgd61d12e">
 ```&lt;language-name&gt;
 first line of multiline preformatted code
 second line
@@ -2664,7 +2660,7 @@ controlled by:
 </p>
 <ul class="org-ul">
 <li><p>
-User Option: <code>telega-markdown2-backquotes-as-precode</code> 
+User Option: <code>telega-markdown2-backquotes-as-precode</code>
 </p>
 
 <p>
@@ -2672,7 +2668,7 @@ Non-nil for markdown1 style syntax for ```.
 Non-nil activates syntax:
   ```&lt;language-name&gt; (not displayed)
   code code
-  ``` 
+  ```
 </p>
 
 <p>
@@ -2683,7 +2679,7 @@ Default value: <code>known</code>
 <p>
 Org syntax for code blocks is <b><b>NOT YET</b></b> supported:
 </p>
-<pre class="example" id="orgee86edc">
+<pre class="example" id="org343b486">
 #+begin_src &lt;language-name&gt;
 code line
 next code line
@@ -2700,37 +2696,37 @@ Important customizable options:
 </p>
 <ul class="org-ul">
 <li><p>
-User Option: <code>telega-chat-input-markups</code> 
+User Option: <code>telega-chat-input-markups</code>
 </p>
 
 <p>
-Markups to apply when sending input with <kbd>RET</kbd>. 
+Markups to apply when sending input with <kbd>RET</kbd>.
 </p>
 
 <p>
 Default value: <code>(nil "markdown2" "org")</code>
 </p></li>
 <li><p>
-User Option: <code>telega-chat-send-message-on-ret</code> 
+User Option: <code>telega-chat-send-message-on-ret</code>
 </p>
 
 <p>
-Customization for <kbd>RET</kbd> behaviour. 
+Customization for <kbd>RET</kbd> behaviour.
 </p>
 
 <p>
 Default value: <code>always</code>
 </p></li>
 <li><p>
-User Option: <code>telega-chat-markup-functions</code> 
+User Option: <code>telega-chat-markup-functions</code>
 </p>
 
 <p>
-List of markups to use on <code>C-c C-a markup RET</code>. 
+List of markups to use on <code>C-c C-a markup RET</code>.
 </p>
 
 <p>
-Default value: 
+Default value:
 </p>
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">((<span style="font-style: italic;">"markdown2"</span> . telega-markup-markdown2-fmt)
@@ -2861,27 +2857,27 @@ Customizable options for attaching media:
 </p>
 <ul class="org-ul">
 <li><p>
-User Option: <code>telega-chat-upload-attaches-ahead</code> 
+User Option: <code>telega-chat-upload-attaches-ahead</code>
 </p>
 
 <p>
 Non-nil to upload attachments ahead, before message actually sent.
-Having this non-nil "speedups" uploading, it is like files uploads instantly. 
+Having this non-nil "speedups" uploading, it is like files uploads instantly.
 </p>
 
 <p>
 Default value: <code>t</code>
 </p></li>
 <li><p>
-User Option: <code>telega-chat-markup-functions</code> 
+User Option: <code>telega-chat-markup-functions</code>
 </p>
 
 <p>
-List of markups to use on <code>C-c C-a markup RET</code>. 
+List of markups to use on <code>C-c C-a markup RET</code>.
 </p>
 
 <p>
-Default value: 
+Default value:
 </p>
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">((<span style="font-style: italic;">"markdown2"</span> . telega-markup-markdown2-fmt)
@@ -2972,11 +2968,11 @@ killed. This is controlled using custom variable:
 
 <ul class="org-ul">
 <li><p>
-User Option: <code>telega-chat-show-deleted-messages-for</code> 
+User Option: <code>telega-chat-show-deleted-messages-for</code>
 </p>
 
 <p>
-Chat Temex for chats where to show deleted messages in chatbuf. 
+Chat Temex for chats where to show deleted messages in chatbuf.
 </p>
 
 <p>
@@ -3049,231 +3045,50 @@ to cycle chatbuf input ring.
 </dl>
 </div>
 </div>
-<div id="outline-container-completing-input-in-chatbuf" class="outline-3">
-<h3 id="completing-input-in-chatbuf"><a class="self-link" href="#completing-input-in-chatbuf"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Completing input in chatbuf</h3>
-<div class="outline-text-3" id="text-completing-input-in-chatbuf">
+<div id="outline-container-completing-input-in-a-chatbuf" class="outline-3">
+<h3 id="completing-input-in-a-chatbuf"><a class="self-link" href="#completing-input-in-a-chatbuf"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Completing input in a chatbuf</h3>
+<div class="outline-text-3" id="text-completing-input-in-a-chatbuf">
 <p>
-Powerful <code>company-mode</code> can be used to complete input in the chatbuf
-with
+It is possible to complete chatbuf's input with
 <kbd>TAB</kbd> (<code>telega-chatbuf-complete-or-next-link</code>).
 </p>
 
 <p>
-<code>telega</code> provides few company backends, such as:
-</p>
-
-
-<dl class="org-dl">
-<dt>telega-company-emoji</dt><dd><p>
-Complete emojis via <code>:&lt;emoji&gt;:</code>
-syntax. Completion is done using predefined set of emojis.
+You can use standard Emacs <code>capf</code> (completion at point) or advanced
+[BROKEN LINK: telega-company].
 </p>
 
 <p>
-Customizable Options:
-</p>
-<ul class="org-ul">
-<li><p>
-User Option: <code>telega-company-emoji-fuzzy-match</code> 
-</p>
-
-<p>
-Non-nil to use fuzzy prefix matching.
-For example without fuzzy matches, prefix <code>:jo</code> will match only
-<code>:joy:</code>, <code>:joy-cat:</code> and <code>:joystick:</code>.  With fuzzy matching
-enabled it will match also <code>:flag-jo:</code> and <code>:black-jocker:</code>. 
-</p>
-
-<p>
-Default value: <code>t</code>
-</p></li>
-</ul></dd>
-</dl>
-
-
-<dl class="org-dl">
-<dt>telega-company-telegram-emoji</dt><dd>Same as <code>telega-company-emoji</code>,
-but uses Telegram cloud for the emojis completion.</dd>
-</dl>
-
-
-<dl class="org-dl">
-<dt>telega-company-username</dt><dd><p>
-Complete user mentions via <code>@&lt;username&gt;</code>
-syntax. Here is the screenshot, showing use of this backend:
-<img src="https://zevlg.github.io/telega/completing-usernames.jpg" alt="completing-usernames.jpg" />
-</p>
-
-<p>
-Use <code>@@</code> prefix to complete chat admins only.
-</p></dd>
-</dl>
-
-<p>
-Customizable options:
-</p>
-<ul class="org-ul">
-<li><p>
-User Option: <code>telega-company-username-prefer-name</code> 
-</p>
-
-<p>
-Preferred formatting argument to the <code>telega-user-title</code> to complete user.
-First giving non-nil result will be used. 
-</p>
-
-<p>
-Default value: <code>(username first-name last-name)</code>
-</p></li>
-<li><p>
-User Option: <code>telega-company-username-show-avatars</code> 
-</p>
-
-<p>
-Non-nil to show avatars in the company annotation. 
-</p>
-
-<p>
-Default value: <code>nil</code>
-</p></li>
-<li><p>
-User Option: <code>telega-company-username-markup</code> 
-</p>
-
-<p>
-Markup to use for usernames completion. 
-</p>
-
-<p>
-Default value: <code>nil</code>
-</p></li>
-</ul>
-
-
-<dl class="org-dl">
-<dt>telega-company-hashtag</dt><dd>Complete common hashtags via
-<code>#&lt;hashtag&gt;</code> syntax.</dd>
-</dl>
-
-
-<dl class="org-dl">
-<dt>telega-company-botcmd</dt><dd>Complete bot commands via <code>/&lt;botcmd&gt;</code>
-syntax.  This backend does not complete if <code>/&lt;botcmd&gt;</code> syntax is
-used in the middle of the chatbuf input, only if <code>/&lt;botcmd&gt;</code>
-starts chatbuf input.</dd>
-</dl>
-
-
-<dl class="org-dl">
-<dt>telega-company-quick-reply</dt><dd>Complete quick replies via
-<code>/&lt;shortcut&gt;</code> syntax in private chats.</dd>
-</dl>
-
-
-<dl class="org-dl">
-<dt>telega-company-markdown-precode</dt><dd>Complete language name for
-code blocks via <code>```</code> syntax.</dd>
-</dl>
-
-<p>
-List of company backends to be used for user input completion is
-controlled by:
-</p>
-<ul class="org-ul">
-<li><p>
-User Option: <code>telega-company-backends</code> 
-</p>
-
-<p>
-Company backends to use in chat buffers.
-Set to nil to disable company completions in chat buffers. 
-</p>
-
-<p>
-Default value: 
+To enable <code>capf</code> completions use:
 </p>
 <div class="org-src-container">
-<pre class="src src-emacs-lisp">(telega-company-emoji telega-company-telegram-emoji
-                      telega-company-username telega-company-hashtag
-                      telega-company-markdown-precode
-                      telega-company-botcmd telega-company-quick-reply)
+<pre class="src src-elisp">(add-hook 'telega-chat-mode-hook 'telega-completions-setup-capf)
+</pre>
+</div>
+
+<p>
+<code>capf</code> functions to be used to complete input:
+</p>
+<ul class="org-ul">
+<li><p>
+User Option: <code>telega-completions-capf-functions</code>
+</p>
+
+<p>
+CAPF functions to add in chat buffers.
+Set to nil to disable.
+</p>
+
+<p>
+Default value:
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(telega-capf-emoji telega-capf-telegram-emoji telega-capf-username
+                   telega-capf-hashtag telega-capf-markdown-precode
+                   telega-capf-quick-reply telega-capf-botcmd)
 </pre>
 </div></li>
 </ul>
-
-
-<p>
-You can use completion without enabling <code>company-mode</code> in the chat
-buffers, by explicitly pressing
-<kbd>TAB</kbd> (<code>telega-chatbuf-complete-or-next-link</code>)
-to perform completion at point.
-</p>
-
-<p>
-On the other hand, <code>company-mode</code> detects input context and pops up
-completion candidates if completion at point is available.  To enable
-<code>company-mode</code> in chat buffers use:
-</p>
-<div class="org-src-container">
-<pre class="src src-elisp">(add-hook 'telega-chat-mode-hook 'company-mode)
-</pre>
-</div>
-
-<p>
-Consider also using <code>company-posframe</code> Emacs package (in MELPA), so
-chatbuf's contents remain untouched when completion menu pops above
-the chatbuf prompt.
-</p>
-
-<p>
-If you don't like <code>company-posframe</code>, consider option:
-</p>
-<ul class="org-ul">
-<li><p>
-User Option: <code>telega-company-tooltip-always-below</code> 
-</p>
-
-<p>
-Non-nil to show company tooltip always below the point.
-Done by recentering point in the chatbuf. 
-</p>
-
-<p>
-Default value: <code>t</code>
-</p></li>
-</ul>
-</div>
-<div id="outline-container-using-capf-for-input-completions" class="outline-4">
-<h4 id="using-capf-for-input-completions"><a class="self-link" href="#using-capf-for-input-completions"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Using capf for input completions</h4>
-<div class="outline-text-4" id="text-using-capf-for-input-completions">
-<p>
-It is possible to use standard Emacs <code>capf</code> (completion at point)
-functionality to perform completions in the chatbuf.  You still need
-<code>company.el</code> package installed <b><b>and loaded</b></b> because <code>telega</code> uses it
-as engine.
-</p>
-
-<p>
-<code>capf</code> is used by default if <code>company-mode</code> is disabled in the
-chatbuf, so to enable <code>capf</code> completions setup could look like:
-</p>
-
-<div class="org-src-container">
-<pre class="src src-elisp">(<span style="font-weight: bold;">defun</span> <span style="font-weight: bold;">my-telega-chat-mode</span> ()
-  (<span style="font-weight: bold;">require</span> '<span style="font-weight: bold; text-decoration: underline;">company</span>)
-  (add-hook 'completion-at-point-functions
-            #'telega-chatbuf-complete-at-point nil 'local)
-  )
-
-(add-hook 'telega-chat-mode-hook 'my-telega-chat-mode)
-</pre>
-</div>
-
-<p>
-<code>capf</code> functionality is very limited comparing to <code>company-mode</code>
-completions, however, some users might still prefer <code>capf</code>.
-</p>
-</div>
 </div>
 </div>
 <div id="outline-container-sending-messages-via-bots" class="outline-3">
@@ -3308,11 +3123,11 @@ Customizable options for inline bots:
 </p>
 <ul class="org-ul">
 <li><p>
-User Option: <code>telega-known-inline-bots</code> 
+User Option: <code>telega-known-inline-bots</code>
 </p>
 
 <p>
-List of known bots for everyday use. 
+List of known bots for everyday use.
 </p>
 
 <p>
@@ -3320,11 +3135,11 @@ Default value: <code>("@gif" "@youtube" "@pic")</code>
 </p></li>
 
 <li><p>
-User Option: <code>telega-inline-query-window-select</code> 
+User Option: <code>telega-inline-query-window-select</code>
 </p>
 
 <p>
-Non-nil to select window with inline query results. 
+Non-nil to select window with inline query results.
 </p>
 
 <p>
@@ -3396,14 +3211,14 @@ Behaviour is controlled by:
 </p>
 <ul class="org-ul">
 <li><p>
-User Option: <code>telega-open-file-function</code> 
+User Option: <code>telega-open-file-function</code>
 </p>
 
 <p>
 Function to use to open files associated with messages.
 Called with single argument - filename to open.
 Could be used to open files in external programs.
-Set it to <code>org-open-file</code> to use Org mode to open files. 
+Set it to <code>org-open-file</code> to use Org mode to open files.
 </p>
 
 <p>
@@ -3434,14 +3249,14 @@ If you also want to open non-document messages as file using
 </p>
 <ul class="org-ul">
 <li><p>
-User Option: <code>telega-open-message-as-file</code> 
+User Option: <code>telega-open-message-as-file</code>
 </p>
 
 <p>
 List of message types to open as file using <code>telega-open-file-function</code>.
 Supported message types are: <code>photo</code>, <code>video</code>, <code>audio</code>,
 <code>video-note</code>, <code>voice-note</code>, <code>animation</code>.
-Document messages are always opens as file. 
+Document messages are always opens as file.
 </p>
 
 <p>
@@ -3463,12 +3278,12 @@ Also, you can open urls using custom functions:
 </p>
 <ul class="org-ul">
 <li><p>
-User Option: <code>telega-browse-url-alist</code> 
+User Option: <code>telega-browse-url-alist</code>
 </p>
 
 <p>
 Alist of custom url browse functions.
-Each element is in form: <code>(PREDICATE-OR-REGEX . FUNCTION)</code>. 
+Each element is in form: <code>(PREDICATE-OR-REGEX . FUNCTION)</code>.
 </p>
 
 <p>
@@ -3540,11 +3355,11 @@ messages are labeled with:
 </p>
 <ul class="org-ul">
 <li><p>
-User Option: <code>telega-symbol-favorite</code> 
+User Option: <code>telega-symbol-favorite</code>
 </p>
 
 <p>
-Symbol to use for favorite messages, bookmarks. 
+Symbol to use for favorite messages, bookmarks.
 </p>
 
 <p>
@@ -3579,8 +3394,8 @@ Some media messages that are playing inside Emacs (such as "audio",
 "voice-note" or "video-note" messages) will have additional media
 control buttons to control media playback parameters:
 </p>
-<pre class="example" id="orge5f463f">
-[⏪] [⏩] [2×] [Stop] 
+<pre class="example" id="orgb7740bb">
+[⏪] [⏩] [2×] [Stop]
 </pre>
 
 <p>
@@ -3647,36 +3462,36 @@ Important customizable options for stickers:
 </p>
 <ul class="org-ul">
 <li><p>
-User Option: <code>telega-sticker-size</code> 
+User Option: <code>telega-sticker-size</code>
 </p>
 
 <p>
 Size for the sticker.
 car is height in chars to use.
-cdr is maximum width in chars to use. 
+cdr is maximum width in chars to use.
 </p>
 
 <p>
 Default value: <code>(4 . 24)</code>
 </p></li>
 <li><p>
-User Option: <code>telega-sticker-set-download</code> 
+User Option: <code>telega-sticker-set-download</code>
 </p>
 
 <p>
-Non-nil to automatically download known sticker sets. 
+Non-nil to automatically download known sticker sets.
 </p>
 
 <p>
 Default value: <code>nil</code>
 </p></li>
 <li><p>
-User Option: <code>telega-sticker-favorite-background</code> 
+User Option: <code>telega-sticker-favorite-background</code>
 </p>
 
 <p>
 Background color for the favorite stickers.
-Can be nil, in this case favorite stickers are not outlined. 
+Can be nil, in this case favorite stickers are not outlined.
 </p>
 
 <p>
@@ -3695,35 +3510,35 @@ Important customizable options for animations:
 </p>
 <ul class="org-ul">
 <li><p>
-User Option: <code>telega-animation-height</code> 
+User Option: <code>telega-animation-height</code>
 </p>
 
 <p>
-Height in chars for animations. 
+Height in chars for animations.
 </p>
 
 <p>
 Default value: <code>5</code>
 </p></li>
 <li><p>
-User Option: <code>telega-animation-play-inline</code> 
+User Option: <code>telega-animation-play-inline</code>
 </p>
 
 <p>
 Non-nil to play animation inside telega.
 If number, then play animation inline only if animation is shorter
-then this number of seconds. 
+then this number of seconds.
 </p>
 
 <p>
 Default value: <code>10</code>
 </p></li>
 <li><p>
-User Option: <code>telega-animation-download-saved</code> 
+User Option: <code>telega-animation-download-saved</code>
 </p>
 
 <p>
-Non-nil to automatically download saved animations. 
+Non-nil to automatically download saved animations.
 </p>
 
 <p>
@@ -3761,12 +3576,12 @@ stickers are filled with color:
 </p>
 <ul class="org-ul">
 <li><p>
-User Option: <code>telega-sticker-favorite-background</code> 
+User Option: <code>telega-sticker-favorite-background</code>
 </p>
 
 <p>
 Background color for the favorite stickers.
-Can be nil, in this case favorite stickers are not outlined. 
+Can be nil, in this case favorite stickers are not outlined.
 </p>
 
 <p>
@@ -3831,24 +3646,24 @@ chatbuf's footer.  This behaviour is controlled by custom options:
 
 <ul class="org-ul">
 <li><p>
-User Option: <code>telega-story-show-active-stories-for</code> 
+User Option: <code>telega-story-show-active-stories-for</code>
 </p>
 
 <p>
 Show active stories in the chatbuf's footer for chats matching this temex.
-If temex returns a number then limit number of shown active stories. 
+If temex returns a number then limit number of shown active stories.
 </p>
 
 <p>
 Default value: <code>(return 10)</code>
 </p></li>
 <li><p>
-User Option: <code>telega-story-show-pinned-stories-for</code> 
+User Option: <code>telega-story-show-pinned-stories-for</code>
 </p>
 
 <p>
 Show pinned stories in the chatbuf's footer for chats matching this temex.
-If temex returns a number then limit number of shown pinned stories. 
+If temex returns a number then limit number of shown pinned stories.
 </p>
 
 <p>
@@ -3863,11 +3678,11 @@ channels of your interest.  This is controlled by custom option:
 
 <ul class="org-ul">
 <li><p>
-User Option: <code>telega-story-preload-for</code> 
+User Option: <code>telega-story-preload-for</code>
 </p>
 
 <p>
-Preload stories media files for chats matching this temex. 
+Preload stories media files for chats matching this temex.
 </p>
 
 <p>
@@ -3898,14 +3713,14 @@ map</a>.  To setup multiple accounts use:
 
 <ul class="org-ul">
 <li><p>
-User Option: <code>telega-accounts</code> 
+User Option: <code>telega-accounts</code>
 </p>
 
 <p>
 List of the accounts to be used by telega.
 Each element is a list in form:
 (ACCOUNT-NAME CUSTOM-VAR1 VAL1 CUSTOM-VAR2 VAL2 &#x2026;).
-At least <code>telega-database-dir</code> should be customized for each account. 
+At least <code>telega-database-dir</code> should be customized for each account.
 </p>
 
 <p>
@@ -3964,11 +3779,11 @@ Message is triggered for messages matching:
 </p>
 <ul class="org-ul">
 <li><p>
-User Option: <code>telega-notifications-msg-temex</code> 
+User Option: <code>telega-notifications-msg-temex</code>
 </p>
 
 <p>
-Message temex to match messages that needs to be notified. 
+Message temex to match messages that needs to be notified.
 </p>
 
 <p>
@@ -4037,11 +3852,11 @@ To open
 </p>
 <ul class="org-ul">
 <li><p>
-User Option: <code>telega-chat-preview-mode-from-last-message</code> 
+User Option: <code>telega-chat-preview-mode-from-last-message</code>
 </p>
 
 <p>
-Non-nil to load history from last message in preview mode. 
+Non-nil to load history from last message in preview mode.
 </p>
 
 <p>
@@ -4084,15 +3899,15 @@ Customizable options:
 
 <ul class="org-ul">
 <li><p>
-User Option: <code>telega-mode-line-string-format</code> 
+User Option: <code>telega-mode-line-string-format</code>
 </p>
 
 <p>
-Format in mode-line-format for <code>telega-mode-line-string</code>. 
+Format in mode-line-format for <code>telega-mode-line-string</code>.
 </p>
 
 <p>
-Default value: 
+Default value:
 </p>
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="font-style: italic;">"   "</span> (<span style="font-weight: bold;">:eval</span> (telega-mode-line-icon))
@@ -4137,31 +3952,31 @@ Customizable options:
 </p>
 <ul class="org-ul">
 <li><p>
-User Option: <code>telega-appindicator-use-label</code> 
+User Option: <code>telega-appindicator-use-label</code>
 </p>
 
 <p>
 Non-nil to add text labels to the icon.
 Otherwise use just icon to show info.
 labels are not supported by XEMBED based system trays, such as
-<code>exwm-systemtray</code> or <code>polybar</code>. 
+<code>exwm-systemtray</code> or <code>polybar</code>.
 </p>
 
 <p>
 Default value: <code>nil</code>
 </p></li>
 <li><p>
-User Option: <code>telega-appindicator-icon-colors</code> 
+User Option: <code>telega-appindicator-icon-colors</code>
 </p>
 
 <p>
 Colors to use for offline/online appindicator icon.
 Alist with <code>offline</code>, <code>online</code> or <code>connecting</code> as key, and value in form
-(CIRCLE-COLOR TRIANGLE-COLOR ONLINE-CIRCLE-COLOR). 
+(CIRCLE-COLOR TRIANGLE-COLOR ONLINE-CIRCLE-COLOR).
 </p>
 
 <p>
-Default value: 
+Default value:
 </p>
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">((offline <span style="font-style: italic;">"white"</span> <span style="font-style: italic;">"black"</span> nil) (online <span style="font-style: italic;">"#7739aa"</span> <span style="font-style: italic;">"white"</span> <span style="font-style: italic;">"#00ff00"</span>)
@@ -4170,41 +3985,41 @@ Default value:
 </div></li>
 
 <li><p>
-User Option: <code>telega-appindicator-show-account-name</code> 
+User Option: <code>telega-appindicator-show-account-name</code>
 </p>
 
 <p>
 Non-nil to show current account name in appindicator label.
-Applied only if <code>telega-appindicator-use-label</code> is non-nil. 
+Applied only if <code>telega-appindicator-use-label</code> is non-nil.
 </p>
 
 <p>
 Default value: <code>t</code>
 </p></li>
 <li><p>
-User Option: <code>telega-appindicator-show-mentions</code> 
+User Option: <code>telega-appindicator-show-mentions</code>
 </p>
 
 <p>
 Non-nil to show number of mentions in appindicator label.
-Applied only if <code>telega-appindicator-use-label</code> is non-nil. 
+Applied only if <code>telega-appindicator-use-label</code> is non-nil.
 </p>
 
 <p>
 Default value: <code>t</code>
 </p></li>
 <li><p>
-User Option: <code>telega-appindicator-labels</code> 
+User Option: <code>telega-appindicator-labels</code>
 </p>
 
 <p>
 List of number labels to use for the number of unread unmuted chats.
 Use this labels instead of plain number.
-Set to nil to use plain number. 
+Set to nil to use plain number.
 </p>
 
 <p>
-Default value: 
+Default value:
 </p>
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="font-style: italic;">"&#10102;"</span> <span style="font-style: italic;">"&#10103;"</span> <span style="font-style: italic;">"&#10104;"</span> <span style="font-style: italic;">"&#10105;"</span> <span style="font-style: italic;">"&#10106;"</span> <span style="font-style: italic;">"&#10107;"</span> <span style="font-style: italic;">"&#10108;"</span> <span style="font-style: italic;">"&#10109;"</span> <span style="font-style: italic;">"&#10110;"</span> <span style="font-style: italic;">"&#10111;"</span> <span style="font-style: italic;">"&#9451;"</span> <span style="font-style: italic;">"&#9452;"</span> <span style="font-style: italic;">"&#9453;"</span> <span style="font-style: italic;">"&#9454;"</span> <span style="font-style: italic;">"&#9455;"</span> <span style="font-style: italic;">"&#9456;"</span> <span style="font-style: italic;">"&#9457;"</span>
@@ -4237,22 +4052,22 @@ Customizable options:
 </p>
 <ul class="org-ul">
 <li><p>
-User Option: <code>telega-autoplay-msg-temex</code> 
+User Option: <code>telega-autoplay-msg-temex</code>
 </p>
 
 <p>
-Message Temex for messages to automatically play content for. 
+Message Temex for messages to automatically play content for.
 </p>
 
 <p>
 Default value: <code>(type Animation Sticker AnimatedEmoji Gift)</code>
 </p></li>
 <li><p>
-User Option: <code>telega-autoplay-custom-emojis</code> 
+User Option: <code>telega-autoplay-custom-emojis</code>
 </p>
 
 <p>
-Non-nil to automatically play this number of custom emojis in the message. 
+Non-nil to automatically play this number of custom emojis in the message.
 </p>
 
 <p>
@@ -4348,14 +4163,14 @@ using user option:
 
 <ul class="org-ul">
 <li><p>
-User Option: <code>telega-edit-file-buffer-name-function</code> 
+User Option: <code>telega-edit-file-buffer-name-function</code>
 </p>
 
 <p>
 Function to return buffer name when <code>telega-edit-file-mode</code> is enabled.
 Function is called without arguments and should return a buffer name string.
 Inside a function you can use <code>telega-edit-file-message&lt;f&gt;</code> to
-get message associated with the file. 
+get message associated with the file.
 </p>
 
 <p>
@@ -4446,22 +4261,22 @@ buffer.
 
 <ul class="org-ul">
 <li><p>
-User Option: <code>telega-active-locations-show-avatars</code> 
+User Option: <code>telega-active-locations-show-avatars</code>
 </p>
 
 <p>
-Non-nil to show user avatars in chat buffer. 
+Non-nil to show user avatars in chat buffer.
 </p>
 
 <p>
 Default value: <code>nil</code>
 </p></li>
 <li><p>
-User Option: <code>telega-active-locations-show-titles</code> 
+User Option: <code>telega-active-locations-show-titles</code>
 </p>
 
 <p>
-Non-nil to show sender/chat titles along the side with avatars. 
+Non-nil to show sender/chat titles along the side with avatars.
 </p>
 
 <p>
@@ -4488,11 +4303,11 @@ Customizable options:
 </p>
 <ul class="org-ul">
 <li><p>
-User Option: <code>telega-active-video-chats-temex</code> 
+User Option: <code>telega-active-video-chats-temex</code>
 </p>
 
 <p>
-Chat Temex to match chat with active video chat. 
+Chat Temex to match chat with active video chat.
 </p>
 
 <p>
@@ -4523,7 +4338,7 @@ Customizable options:
 </p>
 <ul class="org-ul">
 <li><p>
-User Option: <code>telega-recognize-voice-message-temex</code> 
+User Option: <code>telega-recognize-voice-message-temex</code>
 </p>
 
 <p>
@@ -4531,7 +4346,7 @@ Message Temex for messages to automatically recognize speech.
 Speech recognition is only applied to voice messages matching this
 Message Temex.  Applied only if non-nil.
 For example, to recognize speech in a voice messages only in private
-chats, use <code>(chat (type private))</code> Message Temex. 
+chats, use <code>(chat (type private))</code> Message Temex.
 </p>
 
 <p>
@@ -4554,24 +4369,24 @@ Customizable options:
 </p>
 <ul class="org-ul">
 <li><p>
-User Option: <code>telega-auto-translate-probe-language-codes</code> 
+User Option: <code>telega-auto-translate-probe-language-codes</code>
 </p>
 
 <p>
 List of language codes to probe.
-Chat description is used to probe chat's language. 
+Chat description is used to probe chat's language.
 </p>
 
 <p>
 Default value: <code>nil</code>
 </p></li>
 <li><p>
-User Option: <code>telega-translate-to-language-by-default</code> 
+User Option: <code>telega-translate-to-language-by-default</code>
 </p>
 
 <p>
 Default language code for messages translation.
-If nil, then use language suggested by the server. 
+If nil, then use language suggested by the server.
 </p>
 
 <p>
@@ -4608,7 +4423,7 @@ Customizable options:
 </p>
 <ul class="org-ul">
 <li><p>
-User Option: <code>telega-auto-download-settings-alist</code> 
+User Option: <code>telega-auto-download-settings-alist</code>
 </p>
 
 <p>
@@ -4617,11 +4432,11 @@ car of the item is the network type symbol from
 <code>telega-tdlib-network-type-alist</code>, cdr is auto-download setting.
 Auto-download setting could be one of <code>:disabled</code>, <code>:low</code>, <code>:medium</code>
 or <code>:high</code> keyword denoting auto download preset or a plist with
-TDLib's autoDownloadSettings structure. 
+TDLib's autoDownloadSettings structure.
 </p>
 
 <p>
-Default value: 
+Default value:
 </p>
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">((roaming-mobile . <span style="font-weight: bold;">:disabled</span>) (mobile . <span style="font-weight: bold;">:low</span>) (wi-fi . <span style="font-weight: bold;">:medium</span>)
@@ -4673,35 +4488,35 @@ Customizable options:
 </p>
 <ul class="org-ul">
 <li><p>
-User Option: <code>telega-network-stats-places</code> 
+User Option: <code>telega-network-stats-places</code>
 </p>
 
 <p>
-Where to display network statistics. 
+Where to display network statistics.
 </p>
 
 <p>
 Default value: <code>(mode-line)</code>
 </p></li>
 <li><p>
-User Option: <code>telega-network-stats-update-period</code> 
+User Option: <code>telega-network-stats-update-period</code>
 </p>
 
 <p>
-Update period for network stats. 
+Update period for network stats.
 </p>
 
 <p>
 Default value: <code>10</code>
 </p></li>
 <li><p>
-User Option: <code>telega-network-stats-format</code> 
+User Option: <code>telega-network-stats-format</code>
 </p>
 
 <p>
 Format for the stats string.
 %d - for the download stats in a human readable form.
-%u - for the upload stats in a human readable form. 
+%u - for the upload stats in a human readable form.
 </p>
 
 <p>
@@ -4730,7 +4545,7 @@ Customizable options:
 </p>
 <ul class="org-ul">
 <li><p>
-User Option: <code>telega-ton-star-usd-rate-format</code> 
+User Option: <code>telega-ton-star-usd-rate-format</code>
 </p>
 
 <p>
@@ -4739,7 +4554,7 @@ Format for TON and stars rate to USD.
 %t - USD price for the one TON.
 %I - for the Telegram star icon.
 %B - USD price for the 100 Telegram stars to buy.
-%S - USD price for the 100 Telegram star to sell. 
+%S - USD price for the 100 Telegram star to sell.
 </p>
 
 <p>
@@ -4768,12 +4583,12 @@ Customizable options:
 </p>
 <ul class="org-ul">
 <li><p>
-User Option: <code>telega-proxy-status-auto</code> 
+User Option: <code>telega-proxy-status-auto</code>
 </p>
 
 <p>
 Automatically enable <code>telega-proxy-status-mode</code> when proxy is enabled.
-Also, enable <code>telega-proxy-status-mode</code> if Telegram blocking is expected. 
+Also, enable <code>telega-proxy-status-mode</code> if Telegram blocking is expected.
 </p>
 
 <p>
@@ -4800,15 +4615,15 @@ Control keymaps for which to use transient with:
 </p>
 <ul class="org-ul">
 <li><p>
-User Option: <code>telega-transient-keymaps</code> 
+User Option: <code>telega-transient-keymaps</code>
 </p>
 
 <p>
-List of keymaps names to apply transient for. 
+List of keymaps names to apply transient for.
 </p>
 
 <p>
-Default value: 
+Default value:
 </p>
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(telega-prefix-map telega-sort-map telega-filter-map
@@ -4867,21 +4682,21 @@ Customizable options:
 
 <ul class="org-ul">
 <li><p>
-User Option: <code>org-telega-chat-link-format</code> 
+User Option: <code>org-telega-chat-link-format</code>
 </p>
 
 <p>
 Description format for link to a chat.
 Format spec:
 %u - chat username if any, %t otherwise.
-%t - chat title with brackets. 
+%t - chat title with brackets.
 </p>
 
 <p>
 Default value: <code>#("◀%t" 0 1 (face (italic telega-blue)))</code>
 </p></li>
 <li><p>
-User Option: <code>org-telega-msg-link-format</code> 
+User Option: <code>org-telega-msg-link-format</code>
 </p>
 
 <p>
@@ -4889,14 +4704,14 @@ Description format for link to a message.
 Format spec:
 %u - user username if any, %t otherwise.
 %t - user title without brackets.
-%m - one line message body. 
+%m - one line message body.
 </p>
 
 <p>
 Default value: <code>#("◀%u&gt; %&gt;.32m" 0 1 (face (italic telega-blue)))</code>
 </p></li>
 <li><p>
-User Option: <code>org-telega-file-link-format</code> 
+User Option: <code>org-telega-file-link-format</code>
 </p>
 
 <p>
@@ -4904,7 +4719,7 @@ Description format for link to a message to open message's media file.
 Format spec:
 %u - user username if any, %t otherwise.
 %t - user title without brackets.
-%m - one line message body. 
+%m - one line message body.
 </p>
 
 <p>
@@ -4930,7 +4745,7 @@ example, with <code>telega-url-shorten-mode</code> enabled in chatbuf, urls
 like:
 </p>
 
-<pre class="example" id="org8b2183b">
+<pre class="example" id="orgc68d785">
 https://github.com/zevlg/telega.el/issues/105
 https://gitlab.com/jessieh/mood-line/issues/6
 https://www.youtube.com/watch?v=0m2jR6_eMkU
@@ -4966,11 +4781,11 @@ Customizable options:
 
 <ul class="org-ul">
 <li><p>
-User Option: <code>telega-url-shorten-use-images</code> 
+User Option: <code>telega-url-shorten-use-images</code>
 </p>
 
 <p>
-Non-nil to use images on graphics display. 
+Non-nil to use images on graphics display.
 </p>
 
 <p>
@@ -4993,13 +4808,13 @@ shortening pattern use something like:
 </div></li>
 
 <li><p>
-User Option: <code>telega-url-shorten-mode-for</code> 
+User Option: <code>telega-url-shorten-mode-for</code>
 </p>
 
 <p>
 Chat filter for <code>global-telega-url-shorten-mode</code>.
 <code>global-telega-url-shorten-mode</code> enables urls shortening only for
-chats matching this chat filter. 
+chats matching this chat filter.
 </p>
 
 <p>
@@ -5109,13 +4924,13 @@ Customizable options:
 </p>
 <ul class="org-ul">
 <li><p>
-User Option: <code>telega-mnz-mode-for</code> 
+User Option: <code>telega-mnz-mode-for</code>
 </p>
 
 <p>
 Chat temex for <code>global-telega-mnz-mode</code>.
 Global mnz mode enables <code>telega-mnz-mode</code> only for chats matching
-this chat temex. 
+this chat temex.
 </p>
 
 <p>
@@ -5123,11 +4938,11 @@ Default value: <code>all</code>
 </p></li>
 
 <li><p>
-User Option: <code>telega-mnz-entity-types</code> 
+User Option: <code>telega-mnz-entity-types</code>
 </p>
 
 <p>
-List of entity types for which mnz performs highlighting. 
+List of entity types for which mnz performs highlighting.
 </p>
 
 <p>
@@ -5135,11 +4950,11 @@ Default value: <code>(textEntityTypePreCode)</code>
 </p></li>
 
 <li><p>
-User Option: <code>telega-mnz-edit-code-block</code> 
+User Option: <code>telega-mnz-edit-code-block</code>
 </p>
 
 <p>
-How to edit message containing mnz code blocks. 
+How to edit message containing mnz code blocks.
 </p>
 
 <p>
@@ -5147,13 +4962,13 @@ Default value: <code>query</code>
 </p></li>
 
 <li><p>
-User Option: <code>telega-mnz-use-language-detection</code> 
+User Option: <code>telega-mnz-use-language-detection</code>
 </p>
 
 <p>
 Non-nil to use <code>language-detection</code> for blocks without specified language.
 Could be also a number, meaning that language detection is done
-only for code larger then this number of chars. 
+only for code larger then this number of chars.
 </p>
 
 <p>
@@ -5161,12 +4976,12 @@ Default value: <code>nil</code>
 </p></li>
 
 <li><p>
-User Option: <code>telega-mnz-edit-display-buffer-action</code> 
+User Option: <code>telega-mnz-edit-display-buffer-action</code>
 </p>
 
 <p>
 Action value when poping to code edit buffer.
-See docstring for <code>display-buffer</code> for the value meaning. 
+See docstring for <code>display-buffer</code> for the value meaning.
 </p>
 
 <p>
@@ -5198,22 +5013,22 @@ Customizable options:
 </p>
 <ul class="org-ul">
 <li><p>
-User Option: <code>telega-dashboard-chat-filter</code> 
+User Option: <code>telega-dashboard-chat-filter</code>
 </p>
 
 <p>
-Chat Filter used to filter chats to display in the Emacs dashboard. 
+Chat Filter used to filter chats to display in the Emacs dashboard.
 </p>
 
 <p>
 Default value: <code>(or mention (and unread unmuted))</code>
 </p></li>
 <li><p>
-User Option: <code>telega-dashboard-chat-inserter</code> 
+User Option: <code>telega-dashboard-chat-inserter</code>
 </p>
 
 <p>
-Inserter for the chat button in the Emacs dashboard. 
+Inserter for the chat button in the Emacs dashboard.
 </p>
 
 <p>
@@ -5277,67 +5092,67 @@ Customizable options:
 </p>
 <ul class="org-ul">
 <li><p>
-User Option: <code>telega-emacs-stories-show</code> 
+User Option: <code>telega-emacs-stories-show</code>
 </p>
 
 <p>
-Show <code>all</code> or only <code>unread</code> stories. 
+Show <code>all</code> or only <code>unread</code> stories.
 </p>
 
 <p>
 Default value: <code>unread</code>
 </p></li>
 <li><p>
-User Option: <code>telega-emacs-stories-height</code> 
+User Option: <code>telega-emacs-stories-height</code>
 </p>
 
 <p>
-Height in chars for Emacs Stories buttons. 
+Height in chars for Emacs Stories buttons.
 </p>
 
 <p>
 Default value: <code>6</code>
 </p></li>
 <li><p>
-User Option: <code>telega-emacs-stories-notify-if</code> 
+User Option: <code>telega-emacs-stories-notify-if</code>
 </p>
 
 <p>
-Pop notification on new story if stories chat matches this Chat Filter. 
+Pop notification on new story if stories chat matches this Chat Filter.
 </p>
 
 <p>
 Default value: <code>(not unmuted)</code>
 </p></li>
 <li><p>
-User Option: <code>telega-emacs-stories-preload-content</code> 
+User Option: <code>telega-emacs-stories-preload-content</code>
 </p>
 
 <p>
-Preload content when Emacs Story is inserted, so can be viewed instantly. 
+Preload content when Emacs Story is inserted, so can be viewed instantly.
 </p>
 
 <p>
 Default value: <code>t</code>
 </p></li>
 <li><p>
-User Option: <code>telega-emacs-stories-root-view-count</code> 
+User Option: <code>telega-emacs-stories-root-view-count</code>
 </p>
 
 <p>
-Number of Emacs Stories to show in "Emacs Stories" rootview. 
+Number of Emacs Stories to show in "Emacs Stories" rootview.
 </p>
 
 <p>
 Default value: <code>12</code>
 </p></li>
 <li><p>
-User Option: <code>telega-emacs-stories-root-view-keep-viewed</code> 
+User Option: <code>telega-emacs-stories-root-view-keep-viewed</code>
 </p>
 
 <p>
 Keep viewed stories in the "Emacs Stories" rootview.
-Non-nil to keep story in the root view after story is viewed. 
+Non-nil to keep story in the root view after story is viewed.
 </p>
 
 <p>
@@ -5369,99 +5184,99 @@ Customizable options:
 </p>
 <ul class="org-ul">
 <li><p>
-User Option: <code>telega-adblock-for</code> 
+User Option: <code>telega-adblock-for</code>
 </p>
 
 <p>
-Chat Temex to match chats for which to apply adblock logic. 
+Chat Temex to match chats for which to apply adblock logic.
 </p>
 
 <p>
 Default value: <code>(and (type channel) (not unmuted) (not (is-verified by-telegram)))</code>
 </p></li>
 <li><p>
-User Option: <code>telega-adblock-chat-order-if-last-message-ignored</code> 
+User Option: <code>telega-adblock-chat-order-if-last-message-ignored</code>
 </p>
 
 <p>
 Custom chat order for chats with last message being ignored by adblock.
 Set to "1" to put chats with ignored last message to the bottom of
-the rootbuf. 
+the rootbuf.
 </p>
 
 <p>
 Default value: <code>nil</code>
 </p></li>
 <li><p>
-User Option: <code>telega-adblock-verbose</code> 
+User Option: <code>telega-adblock-verbose</code>
 </p>
 
 <p>
-Non-nil to show (in echo area) reason why message is ignored by adblock. 
+Non-nil to show (in echo area) reason why message is ignored by adblock.
 </p>
 
 <p>
 Default value: <code>nil</code>
 </p></li>
 <li><p>
-User Option: <code>telega-adblock-max-distance</code> 
+User Option: <code>telega-adblock-max-distance</code>
 </p>
 
 <p>
 Maximum string-distance for self-link.
 Used for heuristics to avoid blocking non-advert messages in some channels.
-Set it to less value if you see some advert messages not being blocked. 
+Set it to less value if you see some advert messages not being blocked.
 </p>
 
 <p>
 Default value: <code>4</code>
 </p></li>
 <li><p>
-User Option: <code>telega-adblock-same-link-count</code> 
+User Option: <code>telega-adblock-same-link-count</code>
 </p>
 
 <p>
 Number of links to the same resource.
-Used by <code>telega-adblock-msg-multiple-same-links-p</code>. 
+Used by <code>telega-adblock-msg-multiple-same-links-p</code>.
 </p>
 
 <p>
 Default value: <code>3</code>
 </p></li>
 <li><p>
-User Option: <code>telega-adblock-block-msg-temex</code> 
+User Option: <code>telega-adblock-block-msg-temex</code>
 </p>
 
 <p>
-Message temex for <code>telega-adblock-msg-by-temex-p</code> predicate. 
+Message temex for <code>telega-adblock-msg-by-temex-p</code> predicate.
 </p>
 
 <p>
 Default value: <code>nil</code>
 </p></li>
 <li><p>
-User Option: <code>telega-adblock-allow-msg-temex</code> 
+User Option: <code>telega-adblock-allow-msg-temex</code>
 </p>
 
 <p>
-Message's matching this temex will be allowed. 
+Message's matching this temex will be allowed.
 </p>
 
 <p>
 Default value: <code>(or is-reply-to-msg is-reply-to-story)</code>
 </p></li>
 <li><p>
-User Option: <code>telega-adblock-predicates</code> 
+User Option: <code>telega-adblock-predicates</code>
 </p>
 
 <p>
 List of predicates to check message for advertisements.
 Each predicate accepts single argument - message.
-If any of predicates returns non-nil, then message contains advert. 
+If any of predicates returns non-nil, then message contains advert.
 </p>
 
 <p>
-Default value: 
+Default value:
 </p>
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(telega-adblock-msg-by-temex-p telega-adblock-msg-forwarded-p
@@ -5490,12 +5305,12 @@ Customizable options:
 </p>
 <ul class="org-ul">
 <li><p>
-User Option: <code>telega-channels-export-template</code> 
+User Option: <code>telega-channels-export-template</code>
 </p>
 
 <p>
 URL template where single %s is substituteed with channel username.
-Use rsshub or rssbrdige (or whatever that supports Telegram) url. 
+Use rsshub or rssbrdige (or whatever that supports Telegram) url.
 </p>
 
 <p>

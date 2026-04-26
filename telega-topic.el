@@ -246,7 +246,8 @@ If SYNC-P is non-nil, fetch missing forum topic info before returning it."
                     (forum-topic-msg (telega-msg-match-p msg 'is-forum-topic))
                     (topic (telega--getForumTopic
                             chat (plist-get forum-topic-msg :forum_topic_id))))
-          (telega-topic--ensure topic chat)))))
+          (unless (telega--tl-error-p topic)
+            (telega-topic--ensure topic chat))))))
 
 (defun telega-topic-at (&optional pos)
   "Return topic at point POS."

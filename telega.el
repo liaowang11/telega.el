@@ -8,8 +8,8 @@
 ;; Keywords: comm
 ;; Package-Requires: ((emacs "27.1") (visual-fill-column "1.9") (transient "0.9.0"))
 ;; URL: https://github.com/zevlg/telega.el
-;; Version: 0.8.630
-(defconst telega-version "0.8.630")
+;; Version: 0.8.632
+(defconst telega-version "0.8.632")
 (defconst telega-server-min-version "0.7.7")
 (defconst telega-tdlib-min-version "1.8.63")
 (defconst telega-tdlib-max-version nil)
@@ -62,6 +62,7 @@ Used for manual generation.")
 (require 'telega-modes)
 (require 'telega-i18n)
 (require 'telega-story)
+(require 'telega-completions)
 (require 'telega-tdlib)
 (require 'telega-tdlib-events)
 
@@ -386,7 +387,11 @@ string at point."
 (provide 'telega)
 
 
-(push (expand-file-name "contrib" telega--lib-directory) load-path)
+;; don't add contrib directory when it doesn't exist
+;; in guix contrib is installed separately from the main package
+(let ((contrib (expand-file-name "contrib" telega--lib-directory)))
+  (when (file-directory-p contrib)
+    (push contrib load-path)))
 
 ;; Enable some global minor modes by default
 (telega-patrons-mode 1)
