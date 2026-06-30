@@ -970,8 +970,9 @@ CHAT-NODE is EWOC's node for the CHAT."
     (setq chat-node (telega-ewoc--find-by-data ewoc chat)))
 
   (if (and chat-node (not (telega-chat-order-dirty-p chat)))
-      (telega-ewoc--move-node ewoc chat-node chat-node
-                              telega-root-keep-cursor)
+      (setq chat-node
+            (telega-ewoc--move-node ewoc chat-node chat-node
+                                    telega-root-keep-cursor))
 
     ;; Reorder needed or new chat created
     (let* ((cmp-func (telega-root-view--ewoc-sorter ewoc-name #'telega-chat>))
@@ -983,14 +984,31 @@ CHAT-NODE is EWOC's node for the CHAT."
       (if (not chat-node)
           ;; New chat created
           (telega-save-cursor
-            (if before-node
-                (ewoc-enter-before ewoc before-node chat)
-              (ewoc-enter-last ewoc chat)))
+            (setq chat-node
+                  (if before-node
+                      (ewoc-enter-before ewoc before-node chat)
+                    (ewoc-enter-last ewoc chat))))
 
         ;; Reorder
-        (telega-ewoc--move-node ewoc chat-node before-node
-                                telega-root-keep-cursor))
-      )))
+        (setq chat-node
+              (telega-ewoc--move-node ewoc chat-node before-node
+                                      telega-root-keep-cursor)))
+      ))
+
+  (telega-root--sanitize-next-chat-node ewoc chat-node))
+
+(defun telega-root--sanitize-next-chat-node (ewoc chat-node)
+  "Refresh the next chat node to reclaim stray boundary newlines.
+
+Blank lines can accumulate before the next chat button while still
+belonging to the next chat node's EWOC region.  Refreshing CHAT-NODE
+alone does not touch them, so also invalidate the next chat node when
+present."
+  (when-let* ((next-node (and chat-node (ewoc-next ewoc chat-node)))
+              (next-chat (ewoc-data next-node))
+              ((telega-chat-p next-chat)))
+    (telega-save-excursion
+      (ewoc-invalidate ewoc next-node))))
 
 (defun telega-root--any-on-chat-update (ewoc-name ewoc chat)
   "Update CHAT in EWOC.
