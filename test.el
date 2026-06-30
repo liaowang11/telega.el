@@ -603,6 +603,59 @@ argument would leave them holding an object the cache does not use."
       (remhash chat-id telega--chat-topics)
       (remhash bot-id users-ht)
       (remhash chat-id telega--chats))))
+(ert-deftest telega-root-chat-update-cleans-next-chat-leading-newlines ()
+  "Refreshing a chat should clean stray newlines before the next chat button."
+  (let* ((forum-chat-id 90931)
+         (next-chat-id 90932)
+         (topic-id 90933)
+         (forum-chat `(:@type "chat" :id ,forum-chat-id :title "Forum A"
+                              :telega-topics-visible t))
+         (next-chat `(:@type "chat" :id ,next-chat-id :title "Chat B"))
+         (forum-topic `(:@type "forumTopic" :id ,topic-id :order "1"
+                                     :telega_message_count 1
+                                     :info (:@type "forumTopicInfo"
+                                                   :chat_id ,forum-chat-id
+                                                   :forum_topic_id ,topic-id
+                                                   :icon (:@type "forumTopicIcon"
+                                                                 :color 0
+                                                                 :custom_emoji_id "0")
+                                                   :name "Topic 1"))))
+    (unwind-protect
+        (progn
+          (puthash forum-chat-id forum-chat telega--chats)
+          (puthash next-chat-id next-chat telega--chats)
+          (puthash forum-chat-id `((,topic-id . ,forum-topic)) telega--chat-topics)
+          (let ((telega-inserter-for-chat-button
+                 (lambda (chat)
+                   (insert (plist-get chat :title))))
+                (telega-inserter-for-topic-button
+                 (lambda (topic)
+                   (insert (plist-get (plist-get topic :info) :name)))))
+            (with-temp-buffer
+              (let* ((ewoc (ewoc-create (telega-ewoc--gen-pp #'telega-root--chat-pp)
+                                        nil nil 'no-sep))
+                     (_forum-node (ewoc-enter-last ewoc forum-chat))
+                     (next-node (ewoc-enter-last ewoc next-chat))
+                     (next-end (lambda ()
+                                 (ewoc-location (or (ewoc-next ewoc next-node)
+                                                    (ewoc--footer ewoc)))))
+                     (button-pos (lambda ()
+                                   (cl-loop for pos from (ewoc-location next-node)
+                                            below (funcall next-end)
+                                            thereis (and (button-at pos) pos)))))
+                (goto-char (ewoc-location next-node))
+                (insert "\n\n\n")
+                (should (= (funcall button-pos)
+                           (+ (marker-position (ewoc-location next-node)) 3)))
+                (telega-root--existing-on-chat-update "root" ewoc forum-chat)
+                (should (= (funcall button-pos)
+                           (marker-position (ewoc-location next-node))))
+                (should (string=
+                         (buffer-substring-no-properties (point-min) (point-max))
+                         "Forum A\nTopic 1\nChat B\n"))))))
+      (remhash forum-chat-id telega--chat-topics)
+      (remhash forum-chat-id telega--chats)
+      (remhash next-chat-id telega--chats))))
 ;; Local Variables:
 ;; no-byte-compile: t
 ;; End:
