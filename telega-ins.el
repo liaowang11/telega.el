@@ -1064,7 +1064,10 @@ If NO-2X-BUTTON is specified, then do not display \"2x\" button."
 
 (defun telega--can-speech-recognize-p (&optional duration)
   "Return non-nil if speech recognition is available."
-  (or (telega-user-match-p (telega-user-me) 'is-premium)
+  ;; NOTE: Use local me-user lookup so webpage/voice rendering can run
+  ;; without a live telega-server process.
+  (or (when-let ((me (telega-user-me 'locally)))
+        (telega-user-match-p me 'is-premium))
       (and telega--speech-recognition-trial
            (> (plist-get telega--speech-recognition-trial :left_count) 0)
            (or (null duration)
