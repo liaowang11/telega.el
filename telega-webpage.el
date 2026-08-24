@@ -527,10 +527,7 @@ Keymap:
          :inserter #'telega-webpage--ins-pb-details
          :help-echo "Toggle details"))
       (pageBlockTable
-       (let ((telega-webpage-strip-nl t))
-         (telega-webpage--ins-rt (plist-get pb :caption)))
-       (telega-ins "\n")
-       (telega-ins "<TODO: pageBlockTable>\n"))
+       (telega-rich-text--ins-pb-table pb))
       (pageBlockRelatedArticle
        (telega-button--insert 'telega pb
          :inserter 'telega-webpage--ins-related-article

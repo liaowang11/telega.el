@@ -276,6 +276,127 @@
         (telega-rich-text--ins-pb pb-item)))
     t))
 
+(defun telega-rich-text--split-line-to-width (line width)
+  "Split LINE into chunks no wider than WIDTH columns."
+  (if (or (<= (string-width line) width)
+          (<= width 0))
+      (list line)
+    (let ((start 0)
+          chunks)
+      (while (< start (length line))
+        (let ((end start)
+              (chunk-width 0))
+          (while (and (< end (length line))
+                      (let ((char-width
+                             (string-width (substring line end (1+ end)))))
+                        (or (= end start)
+                            (<= (+ chunk-width char-width) width))))
+            (setq chunk-width (+ chunk-width
+                                 (string-width (substring line end (1+ end)))))
+            (setq end (1+ end)))
+          (push (substring line start end) chunks)
+          (setq start end)))
+      (nreverse chunks))))
+
+(defun telega-rich-text--split-lines-to-width (text width)
+  "Split each line in TEXT into chunks no wider than WIDTH columns."
+  (apply #'nconc
+         (mapcar (lambda (line)
+                   (telega-rich-text--split-line-to-width line width))
+                 (split-string text "\n"))))
+
+(defun telega-rich-text--pb-table-cell (cell width)
+  "Render table CELL's rich text wrapped and aligned to WIDTH.
+Return a list of lines, each exactly WIDTH columns wide."
+  (let* ((text (plist-get cell :text))
+         (align (pcase (and (plist-get cell :align)
+                            (telega--tl-type (plist-get cell :align)))
+                  ('pageBlockHorizontalAlignmentCenter 'center)
+                  ('pageBlockHorizontalAlignmentRight 'right)
+                  (_ 'left)))
+         (rendered (telega-ins--as-string
+                     (telega-ins--with-face (when (plist-get cell :is_header) 'bold)
+                       (when text (telega-rich-text--ins-rt text)))))
+         (wrapped (telega-ins--as-string
+                    (telega-ins--with-attrs (list :fill 'left :fill-column width)
+                      (telega-ins rendered)))))
+    (mapcar (lambda (line)
+              (telega-ins--as-string
+                (telega-ins--with-attrs (list :align align :min width)
+                  (telega-ins line))))
+            (telega-rich-text--split-lines-to-width wrapped width))))
+
+(defun telega-rich-text--ins-pb-table (pb)
+  "Inserter for `pageBlockTable' page block PB."
+  (let* ((rows (mapcar (lambda (row) (append row nil))
+                       (append (plist-get pb :cells) nil)))
+         (ncols (apply #'max 0 (mapcar #'length rows))))
+    (when (> ncols 0)
+      (let* ((naturals
+              (cl-loop for j below ncols collect
+                       (cl-loop for row in rows
+                                for cell = (nth j row)
+                                maximize
+                                (if (plist-get cell :text)
+                                    (cl-loop for line in (split-string
+                                                          (telega-ins--as-string
+                                                            (telega-rich-text--ins-rt
+                                                             (plist-get cell :text)))
+                                                          "\n")
+                                             maximize (string-width line))
+                                  0))))
+             (nat-sum (apply #'+ naturals))
+             ;; Each column adds two padding spaces and a separator bar, plus
+             ;; one leading bar; shrink columns proportionally when too wide.
+             (allowed (- telega-webpage-fill-column (1+ (* 3 ncols))))
+             (widths (if (<= nat-sum allowed)
+                         naturals
+                       (cl-loop for n in naturals collect
+                                (max 5 (floor (* allowed (/ (float n)
+                                                            (max 1 nat-sum))))))))
+             (segs (cl-loop for w in widths collect (make-string (+ w 2) ?─)))
+             (vbar (propertize "│" 'face 'telega-shadow))
+             (last-row (1- (length rows))))
+        (cl-flet ((border (l m r)
+                    (telega-ins (propertize
+                                 (concat l (mapconcat #'identity segs m) r)
+                                 'face 'telega-shadow)
+                                "\n")))
+          (telega-ins "\n")
+          (border "┌" "┬" "┐")
+          (cl-loop for row in rows for i from 0 do
+                   (let* ((cells (cl-loop for j below ncols collect
+                                          (telega-rich-text--pb-table-cell
+                                           (nth j row) (nth j widths))))
+                          (height (apply #'max 1 (mapcar #'length cells)))
+                          (padded (cl-loop
+                                   for j below ncols
+                                   for lines in cells
+                                   for blank = (make-string (nth j widths) ?\s)
+                                   for pad = (- height (length lines))
+                                   collect
+                                   (pcase (and (plist-get (nth j row) :valign)
+                                               (telega--tl-type
+                                                (plist-get (nth j row) :valign)))
+                                     ('pageBlockVerticalAlignmentBottom
+                                      (append (make-list pad blank) lines))
+                                     ('pageBlockVerticalAlignmentMiddle
+                                      (append (make-list (/ pad 2) blank) lines
+                                              (make-list (- pad (/ pad 2)) blank)))
+                                     (_ (append lines (make-list pad blank)))))))
+                     (dotimes (k height)
+                       (telega-ins vbar)
+                       (dotimes (j ncols)
+                         (telega-ins " " (nth k (nth j padded)) " " vbar))
+                       (telega-ins "\n"))
+                     (unless (= i last-row)
+                       (border "├" "┼" "┤"))))
+          (border "└" "┴" "┘"))))
+    ;; Stock TDLib tables carry a caption; markdown-derived ones do not.
+    (when-let ((caption (plist-get pb :caption)))
+      (telega-rich-text--ins-rt caption))
+    t))
+
 (defun telega-rich-text--ins-pb (pb &optional _msg)
   "Inserter for the page block PB."
   (when pb
@@ -458,10 +579,7 @@
            :action 'telega-tme-open-username)
          (telega-ins "\n")))
       (pageBlockTable
-       (telega-ins-from-newline
-        (telega-ins "<TODO: pageBlockTable>\n")
-        (telega-ins-from-newline
-         (telega-rich-text--ins-rt (plist-get pb :caption)))))
+       (telega-rich-text--ins-pb-table pb))
       (pageBlockDetails
        (telega-button--insert 'telega pb
          'action (lambda (button)
