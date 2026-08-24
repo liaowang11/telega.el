@@ -696,6 +696,69 @@ argument would leave them holding an object the cache does not use."
     (telega-test--should-render-table
      (buffer-substring-no-properties (point-min) (point-max)))))
 
+(ert-deftest telega-topic-delete-prunes-cached-topic ()
+  "Deleting a topic should drop it from the chat's cached topics alist."
+  (let* ((chat-id 90941)
+         (topic-id 90942)
+         (other-id 90943)
+         (chat `(:@type "chat" :id ,chat-id :title "Forum"))
+         (topic `(:@type "forumTopic"
+                  :telega-chat ,chat
+                  :info (:@type "forumTopicInfo"
+                         :chat_id ,chat-id
+                         :forum_topic_id ,topic-id
+                         :name "Doomed")))
+         (other `(:@type "forumTopic"
+                  :info (:@type "forumTopicInfo"
+                         :chat_id ,chat-id
+                         :forum_topic_id ,other-id
+                         :name "Kept")))
+         (deleted nil)
+         (dirtied nil))
+    (unwind-protect
+        (progn
+          (puthash chat-id chat telega--chats)
+          (puthash chat-id `((,topic-id . ,topic) (,other-id . ,other))
+                   telega--chat-topics)
+          (cl-letf (((symbol-function 'telega-read-im-sure-p)
+                     (lambda (&rest _) t))
+                    ((symbol-function 'telega--deleteForumTopic)
+                     (lambda (&rest args) (setq deleted args) 'sent))
+                    ((symbol-function 'telega-chat--mark-dirty)
+                     (lambda (&rest args) (setq dirtied args))))
+            (should (eq (telega-topic-delete topic) 'sent)))
+          (should deleted)
+          (should (equal dirtied (list chat 'topics)))
+          (should (equal (mapcar #'car (gethash chat-id telega--chat-topics))
+                         (list other-id))))
+      (remhash chat-id telega--chat-topics)
+      (remhash chat-id telega--chats))))
+
+(ert-deftest telega-topic-delete-declines-on-refusal ()
+  "Declining the confirmation should leave the cached topics untouched."
+  (let* ((chat-id 90944)
+         (topic-id 90945)
+         (chat `(:@type "chat" :id ,chat-id :title "Forum"))
+         (topic `(:@type "forumTopic"
+                  :telega-chat ,chat
+                  :info (:@type "forumTopicInfo"
+                         :chat_id ,chat-id
+                         :forum_topic_id ,topic-id
+                         :name "Spared"))))
+    (unwind-protect
+        (progn
+          (puthash chat-id chat telega--chats)
+          (puthash chat-id `((,topic-id . ,topic)) telega--chat-topics)
+          (cl-letf (((symbol-function 'telega-read-im-sure-p)
+                     (lambda (&rest _) nil))
+                    ((symbol-function 'telega--deleteForumTopic)
+                     (lambda (&rest _) (error "Must not delete"))))
+            (should-not (telega-topic-delete topic)))
+          (should (equal (mapcar #'car (gethash chat-id telega--chat-topics))
+                         (list topic-id))))
+      (remhash chat-id telega--chat-topics)
+      (remhash chat-id telega--chats))))
+
 ;; Local Variables:
 ;; no-byte-compile: t
 ;; End:
