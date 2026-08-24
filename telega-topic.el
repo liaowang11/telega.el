@@ -33,7 +33,9 @@
 (declare-function telega-chat-for-interactive "telega-core" ())
 (declare-function telega-chat-get "telega-chat" (chat-id &optional offline-p))
 (declare-function telega-completing-read-topic "telega-util" (chat &optional prompt))
+(declare-function telega-read-im-sure-p "telega-util" (prompt))
 (declare-function telega--createForumTopic "telega-tdlib" (chat name &rest keys))
+(declare-function telega--deleteForumTopic "telega-tdlib" (chat forum-topic))
 (declare-function telega--getForumTopic "telega-tdlib" (chat forum-topic-id &optional callback))
 (declare-function telega--toggleForumTopicIsClosed "telega-tdlib" (chat forum-topic closed-p))
 (declare-function telega-topic-button-action "telega-root" (topic))
@@ -292,6 +294,23 @@ For use by interactive commands."
     (telega--toggleForumTopicIsClosed chat topic (not closed-p))
     (plist-put (plist-get topic :info) :is_closed (not closed-p))
     (telega-chat--mark-dirty chat 'topics)))
+
+(defun telega-topic-delete (topic)
+  "Delete TOPIC after confirmation.
+Unlike `telega-transient-topic-delete', this also drops TOPIC from the
+chat's cached topics alist so the root view stops listing it."
+  (interactive (list (telega-topic-for-interactive)))
+  (let* ((chat (telega-topic-chat topic))
+         (title (telega-tl-str (plist-get topic :info) :name)))
+    (when (telega-read-im-sure-p
+           (format "Delete topic \"%s\"" title))
+      (let ((ret (telega--deleteForumTopic chat topic)))
+        (puthash (plist-get chat :id)
+                 (assq-delete-all (telega-topic-id topic)
+                                  (telega-chat-topics-alist chat))
+                 telega--chat-topics)
+        (telega-chat--mark-dirty chat 'topics)
+        ret))))
 
 (defun telega-topic-goto (topic &optional start-msg-id)
   "Open TOPIC in a chatbuf.
