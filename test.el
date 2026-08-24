@@ -656,6 +656,46 @@ argument would leave them holding an object the cache does not use."
       (remhash forum-chat-id telega--chat-topics)
       (remhash forum-chat-id telega--chats)
       (remhash next-chat-id telega--chats))))
+(defconst telega-test--page-block-table
+  '(:@type "pageBlockTable"
+    :caption (:@type "richTextPlain" :text "TABLE CAPTION")
+    :cells [[(:@type "pageBlockTableCell" :is_header t
+              :text (:@type "richTextPlain" :text "Head"))
+             (:@type "pageBlockTableCell" :is_header t
+              :text (:@type "richTextPlain" :text "Count"))]
+            [(:@type "pageBlockTableCell"
+              :text (:@type "richTextPlain" :text "Row"))
+             (:@type "pageBlockTableCell"
+              :align (:@type "pageBlockHorizontalAlignmentRight")
+              :text (:@type "richTextPlain" :text "42"))]])
+  "Fixture table used by the `pageBlockTable' rendering tests.")
+
+(defun telega-test--should-render-table (rendered)
+  "Assert RENDERED holds a drawn table and no TODO placeholder."
+  (should-not (string-match-p "TODO: pageBlockTable" rendered))
+  (should (string-match-p "┌" rendered))
+  (should (string-match-p "└" rendered))
+  (should (string-match-p "│" rendered))
+  (should (string-match-p "Head" rendered))
+  (should (string-match-p "Count" rendered))
+  (should (string-match-p "Row" rendered))
+  (should (string-match-p "42" rendered))
+  (should (string-match-p "TABLE CAPTION" rendered)))
+
+(ert-deftest telega-rich-text-page-block-table-renders ()
+  "`pageBlockTable' should be drawn in rich messages, not stubbed out."
+  (with-temp-buffer
+    (telega-rich-text--ins-pb telega-test--page-block-table)
+    (telega-test--should-render-table
+     (buffer-substring-no-properties (point-min) (point-max)))))
+
+(ert-deftest telega-webpage-page-block-table-renders ()
+  "`pageBlockTable' should be drawn in instant view, not stubbed out."
+  (with-temp-buffer
+    (telega-webpage--ins-pb telega-test--page-block-table)
+    (telega-test--should-render-table
+     (buffer-substring-no-properties (point-min) (point-max)))))
+
 ;; Local Variables:
 ;; no-byte-compile: t
 ;; End:
